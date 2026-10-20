@@ -34,7 +34,7 @@
 
 No hay vidas: el nivel termina tras 10 preguntas.
 **Estrellas** según las respuestas correctas a la primera: 5+ → ★, 7+ → ★★, 9+ → ★★★.
-Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **repaso de errores** y un **ranking** (mejor puntaje por jugador, top 15).
+Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **repaso de errores** y un **ranking** (mejor puntaje por jugador, top 10).
 
 ### Idiomas y lectura
 - Interfaz en **Español / English / solo chino** (en "solo chino" no se ve ningún texto en español ni en inglés: sin traducciones ni significados; el botón "Pista" solo se ofrece en las preguntas de escuchar, donde muestra la oración escrita)
@@ -70,7 +70,7 @@ Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **
 - 10 秒內答對最多再加 50 分；第二次才答對得 50 分
 - 看「提示」（整句翻譯）扣 20 分；查「詞彙」不扣分
 - 不扣命，每關 10 題結束；依第一次就答對的題數給 1～3 顆星，至少 1 顆星才能解鎖下一關
-- 結算有**錯題複習**，另有**排行榜**（每人只留最高分，前 15 名）
+- 結算有**錯題複習**，另有**排行榜**（每人只留最高分，前 10 名）
 
 ### 語言與讀音
 - 介面：Español／English／只有中文（「只有中文」不會出現任何西文或英文，沒有翻譯和詞義；「提示」只在聽音題提供，顯示整句文字）

@@ -368,8 +368,8 @@ async function lbSave(name,lv,score){
  }catch(x){console.warn(x);}}
 }
 async function lbLoad(){
- if(FB_OK){try{const db=await fb();const s=await db.collection('baLeaderboard').orderBy('total','desc').limit(15).get();return s.docs.map(d=>d.data());}catch(x){console.warn(x);}}
- return Object.entries(localLB()).map(([name,e])=>({name,l1:e.l1||0,l2:e.l2||0,l3:e.l3||0,total:(e.l1||0)+(e.l2||0)+(e.l3||0)})).sort((a,b)=>b.total-a.total).slice(0,15);
+ if(FB_OK){try{const db=await fb();const s=await db.collection('baLeaderboard').orderBy('total','desc').limit(10).get();return s.docs.map(d=>d.data());}catch(x){console.warn(x);}}
+ return Object.entries(localLB()).map(([name,e])=>({name,l1:e.l1||0,l2:e.l2||0,l3:e.l3||0,total:(e.l1||0)+(e.l2||0)+(e.l3||0)})).sort((a,b)=>b.total-a.total).slice(0,10);
 }
 
 /* ---------- 流程 ---------- */
