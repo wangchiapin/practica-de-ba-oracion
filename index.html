@@ -115,7 +115,7 @@ const RAW=[
 [18,[TA,BA,'燈|灯|dēng|ㄉㄥ','關掉|关掉|guān diào|ㄍㄨㄢ ㄉㄧㄠˋ',LE],'Él apagó la luz.','He turned off the light.'],
 [19,[W0,BA,'作業|作业|zuò yè|ㄗㄨㄛˋ ㄧㄝˋ','寫完|写完|xiě wán|ㄒㄧㄝˇ ㄨㄢˊ',LE],'Terminé la tarea.','I finished my homework.'],
 [20,['風|风|fēng|ㄈㄥ',BA,MZ,'吹走||chuī zǒu|ㄔㄨㄟ ㄗㄡˇ',LE],'El viento se llevó el sombrero.','The wind blew the hat away.'],
-[21,[W0,BA,'禮物|礼物|lǐ wù|ㄌㄧˇ ㄨˋ','送給|送给|sòng gěi|ㄙㄨㄥˋ ㄍㄟˇ','朋友||péng yǒu|ㄆㄥˊ ㄧㄡˇ'],'Le regalé el regalo a mi amigo.','I gave the gift to my friend.'],
+[21,[W0,BA,'禮物|礼物|lǐ wù|ㄌㄧˇ ㄨˋ','送給|送给|sòng gěi|ㄙㄨㄥˋ ㄍㄟˇ','朋友||péng yǒu|ㄆㄥˊ ㄧㄡˇ'],'Le di el regalo a mi amigo.','I gave the gift to my friend.'],
 [22,[TA,BA,'錢|钱|qián|ㄑㄧㄢˊ','還給|还给|huán gěi|ㄏㄨㄢˊ ㄍㄟˇ',W0,LE],'Él me devolvió el dinero.','He gave the money back to me.'],
 [23,['請你|请你|qǐng nǐ|ㄑㄧㄥˇ ㄋㄧˇ',BA,SHU,'拿給|拿给|ná gěi|ㄋㄚˊ ㄍㄟˇ',LS],'Por favor, dale el libro a la maestra.','Please hand the book to the teacher.'],
 [24,[MA,BA,'蘋果|苹果|píng guǒ|ㄆㄧㄥˊ ㄍㄨㄛˇ','切成||qiē chéng|ㄑㄧㄝ ㄔㄥˊ','小塊|小块|xiǎo kuài|ㄒㄧㄠˇ ㄎㄨㄞˋ'],'Mamá cortó la manzana en trozos.','Mom cut the apple into small pieces.'],
@@ -128,8 +128,16 @@ const RAW=[
 ];
 const DATA=RAW.map(([id,tk,es,en])=>({id,lv:Math.ceil(id/10),es,en,tok:tk.map(s=>{const [tc,sc,py,zy]=s.split('|');return{tc,sc:sc||tc,py,zy};})}));
 
-const GLOSS={'我':['yo','I'],'把':['palabra clave: pone el objeto antes del verbo','key word: puts the object before the verb'],'書':['libro','book'],'放在':['poner en (un lugar)','put (somewhere)'],'桌子上':['sobre la mesa','on the table'],'他':['él','he'],'包包':['bolso, mochila','bag'],'椅子上':['sobre la silla','on the chair'],'椅子':['silla','chair'],'媽媽':['mamá','mom'],'菜':['verduras, comida','vegetables, dish'],'放進':['meter, poner dentro','put into'],'冰箱裡':['dentro del refrigerador','inside the fridge'],'外套':['abrigo, chaqueta','coat'],'掛在':['colgar en','hang on'],'門後面':['detrás de la puerta','behind the door'],'小明':['Xiaoming (nombre)','Xiaoming (a name)'],'球':['pelota','ball'],'丟進':['tirar dentro de','throw into'],'籃子裡':['dentro de la canasta','in the basket'],'她':['ella','she'],'花':['flor, flores','flower(s)'],'插在':['colocar (insertar) en','stick in'],'花瓶裡':['dentro del florero','in the vase'],'爸爸':['papá','dad'],'車':['carro, auto','car'],'停在':['estacionar en','park at'],'門口':['entrada','entrance'],'手機':['celular','cell phone'],'口袋':['bolsillo','pocket'],'老師':['maestro, maestra','teacher'],'地圖':['mapa','map'],'貼在':['pegar en','stick on'],'牆上':['en la pared','on the wall'],'行李':['equipaje','luggage'],'搬到':['llevar (cargando) hasta','carry to'],'樓上':['piso de arriba','upstairs'],'杯子':['taza, vaso','cup'],'打破':['romper','break'],'了':['partícula: acción completada','particle: completed action'],'門':['puerta','door'],'關上':['cerrar','close'],'窗戶':['ventana','window'],'打開':['abrir','open'],'弟弟':['hermano menor','younger brother'],'牛奶':['leche','milk'],'喝完':['terminar de beber','finish drinking'],'小狗':['perrito','puppy'],'地板':['piso','floor'],'弄髒':['ensuciar','make dirty'],'衣服':['ropa','clothes'],'洗乾淨':['lavar hasta dejar limpio','wash clean'],'蛋糕':['pastel','cake'],'吃完':['terminar de comer','finish eating'],'燈':['luz, lámpara','light'],'關掉':['apagar','turn off'],'作業':['tarea','homework'],'寫完':['terminar de escribir','finish writing'],'風':['viento','wind'],'帽子':['sombrero, gorra','hat'],'吹走':['llevarse (soplando)','blow away'],'禮物':['regalo','gift'],'送給':['regalar a','give (as a gift) to'],'朋友':['amigo, amiga','friend'],'錢':['dinero','money'],'還給':['devolver a','return to'],'請你':['por favor (tú)','please (you)'],'拿給':['dar (algo en la mano) a','hand to'],'蘋果':['manzana','apple'],'切成':['cortar en','cut into'],'小塊':['trozos pequeños','small pieces'],'雨傘':['paraguas','umbrella'],'借給':['prestar a','lend to'],'老闆':['jefe, dueño','boss'],'菜單':['menú','menu'],'拿來':['traer','bring'],'頭髮':['pelo, cabello','hair'],'染成':['teñir de','dye (a color)'],'金色':['rubio, dorado','blond, golden'],'請':['por favor','please'],'外面去':['ir (hacia) afuera','to the outside'],'紅包':['sobre rojo','red envelope'],'交給':['entregar a','hand over to'],'奶奶':['abuela (paterna)','grandma'],'戴在':['ponerse (sombrero) en','wear on'],'頭上':['en la cabeza','on the head']};
+const GLOSS={'我':['yo','I'],'把':['palabra clave: pone el objeto antes del verbo','key word: puts the object before the verb'],'書':['libro','book'],'放在':['poner en (un lugar)','put (somewhere)'],'桌子上':['sobre la mesa','on the table'],'他':['él','he'],'包包':['bolsa, mochila','bag'],'椅子上':['sobre la silla','on the chair'],'椅子':['silla','chair'],'媽媽':['mamá','mom'],'菜':['verduras, comida','vegetables, dish'],'放進':['meter, poner dentro','put into'],'冰箱裡':['dentro del refrigerador','inside the fridge'],'外套':['abrigo, chaqueta','coat'],'掛在':['colgar en','hang on'],'門後面':['detrás de la puerta','behind the door'],'小明':['Xiaoming (nombre)','Xiaoming (a name)'],'球':['pelota','ball'],'丟進':['tirar dentro de','throw into'],'籃子裡':['dentro de la canasta','in the basket'],'她':['ella','she'],'花':['flor, flores','flower(s)'],'插在':['colocar (insertar) en','stick in'],'花瓶裡':['dentro del florero','in the vase'],'爸爸':['papá','dad'],'車':['carro, auto','car'],'停在':['estacionar en','park at'],'門口':['entrada','entrance'],'手機':['celular','cell phone'],'口袋':['bolsillo','pocket'],'老師':['maestro, maestra','teacher'],'地圖':['mapa','map'],'貼在':['pegar en','stick on'],'牆上':['en la pared','on the wall'],'行李':['equipaje','luggage'],'搬到':['llevar (cargando) hasta','carry to'],'樓上':['piso de arriba','upstairs'],'杯子':['taza, vaso','cup'],'打破':['romper','break'],'了':['partícula: acción completada','particle: completed action'],'門':['puerta','door'],'關上':['cerrar','close'],'窗戶':['ventana','window'],'打開':['abrir','open'],'弟弟':['hermano menor','younger brother'],'牛奶':['leche','milk'],'喝完':['terminar de beber','finish drinking'],'小狗':['perrito','puppy'],'地板':['piso','floor'],'弄髒':['ensuciar','make dirty'],'衣服':['ropa','clothes'],'洗乾淨':['lavar hasta dejar limpio','wash clean'],'蛋糕':['pastel','cake'],'吃完':['terminar de comer','finish eating'],'燈':['luz, lámpara','light'],'關掉':['apagar','turn off'],'作業':['tarea','homework'],'寫完':['terminar de escribir','finish writing'],'風':['viento','wind'],'帽子':['sombrero, gorra','hat'],'吹走':['llevarse (soplando)','blow away'],'禮物':['regalo','gift'],'送給':['regalar a','give (as a gift) to'],'朋友':['amigo, amiga','friend'],'錢':['dinero','money'],'還給':['devolver a','return to'],'請你':['por favor (tú)','please (you)'],'拿給':['dar (algo en la mano) a','hand to'],'蘋果':['manzana','apple'],'切成':['cortar en','cut into'],'小塊':['trozos pequeños','small pieces'],'雨傘':['paraguas','umbrella'],'借給':['prestar a','lend to'],'老闆':['jefe, dueño','boss'],'菜單':['menú','menu'],'拿來':['traer','bring'],'頭髮':['pelo, cabello','hair'],'染成':['teñir de','dye (a color)'],'金色':['rubio, dorado','blond, golden'],'請':['por favor','please'],'外面去':['ir (hacia) afuera','to the outside'],'紅包':['sobre rojo','red envelope'],'交給':['entregar a','hand over to'],'奶奶':['abuela (paterna)','grandma'],'戴在':['ponerse (sombrero) en','wear on'],'頭上':['en la cabeza','on the head']};
+const GLOSS_ES={'包包':'bolso, mochila','冰箱裡':'dentro de la nevera','球':'pelota, balón','籃子裡':'dentro de la cesta','車':'coche','停在':'aparcar en','手機':'móvil','樓上':'planta de arriba','地板':'suelo','蛋糕':'tarta, pastel','作業':'deberes, tarea','老師':'profesor, profesora','外面去':'ir (hacia) fuera','弟弟':'hermano pequeño'};
+const SENT_ES={3:'Mamá puso la comida en la nevera.',5:'Xiaoming tiró la pelota a la cesta.',7:'Papá aparcó el coche en la entrada.',8:'Guardé el móvil en el bolsillo.',9:'La profesora pegó el mapa en la pared.',10:'Él subió el equipaje a la planta de arriba.',15:'El perrito ensució el suelo.',17:'Ella se comió toda la tarta.',19:'Terminé los deberes.',23:'Por favor, dale el libro a la profesora.',28:'Por favor, saca la silla fuera.'};
+function gloss(tc){const g=GLOSS[tc]||['',''];if(cfg.lang==='es'&&cfg.region==='es'&&GLOSS_ES[tc])return[GLOSS_ES[tc],g[1]];return g;}
 const TOKMAP={};DATA.forEach(d=>d.tok.forEach(t=>{if(!TOKMAP[t.tc])TOKMAP[t.tc]=t;}));
+const P_PLACE=[[0,2,3,1,4],[0,1,3,2,4],[0,1,2,3],[0,1,3,4,2],[0,3,1,2,4]];
+const P_RES=[[0,2,3,1,4],[0,1,3,2,4],[0,1,2,4],[0,1,2,4,3],[0,3,1,2,4]];
+const P_GIVE=[[0,2,3,1,4],[0,1,3,2,4],[0,1,2,3],[0,1,2,4,3]];
+const P_RET=[[0,2,3,1,4,5],[0,1,3,2,4,5],[0,1,2,4,3,5],[0,1,2,5,3,4]];
+const BADPOOL={};DATA.forEach(d=>{BADPOOL[d.id]=d.id<=10||d.id===30?P_PLACE:(d.id<=20||d.id===26)?P_RES:(d.id===22||d.id===25)?P_RET:P_GIVE;});
 
 /* ---------- 圖：程式碼直接畫 ---------- */
 const G=112;
@@ -155,6 +163,7 @@ function PE(x,o={}){
  t+=C(0,-56,8,K.skin);
  if(hair)t+=`<path d="M-8 -57 A8 8 0 0 1 8 -57 Z" fill="${hair}" ${sw}/>`;
  if(o.bun)t+=C(0,-67,4,hair||K.gray);
+ if(o.long)t+=R(-9,-58,4,15,hair||K.gray,1)+R(5,-58,4,15,hair||K.gray,1);
  if(o.glass)t+=C(-3.6,-55,2.8,'none')+C(3.6,-55,2.8,'none')+L(-0.8,-55,0.8,-55,1);
  if(o.hat)t+=HAT(0,-61);
  return t+'</g>';
@@ -179,7 +188,7 @@ const SU=(x,y)=>R(x,y-18,26,18,K.red,3)+PA(`M${x+8} ${y-18} v-4 h10 v4`);
 const GL=(x,y,m)=>PG(`${x},${y-18} ${x+14},${y-18} ${x+12},${y} ${x+2},${y}`,K.white)+(m?PG(`${x+1.3},${y-12} ${x+12.7},${y-12} ${x+11.4},${y-1.2} ${x+2.6},${y-1.2}`,'#e8e3d3'):'');
 const FLR='<rect x="0" y="'+G+'" width="200" height="18" fill="#ebe7df"/>';
 const DOG=(x,y)=>E(x,y-14,16,9,K.wood)+L(x-8,y-6,x-8,y,2)+L(x+8,y-6,x+8,y,2)+PA(`M${x-16} ${y-16} q-8 -4 -8 -10`)+C(x+16,y-22,7,K.wood)+PG(`${x+19},${y-29} ${x+24},${y-24} ${x+20},${y-22}`,K.woodD)+C(x+19,y-23,1,K.ink);
-const SH=(x,y,st)=>PG(`${x+8},${y} ${x+14},${y+5} ${x+22},${y+5} ${x+28},${y} ${x+38},${y+6} ${x+32},${y+14} ${x+28},${y+11} ${x+28},${y+32} ${x+8},${y+32} ${x+8},${y+11} ${x+4},${y+14} ${x-2},${y+6}`,K.blue)+(st?C(x+16,y+18,3,'#a58d72')+C(x+24,y+24,2.5,'#a58d72')+C(x+13,y+26,2,'#a58d72'):'');
+const SH=(x,y,st)=>PG(`${x+8},${y} ${x+14},${y+5} ${x+22},${y+5} ${x+28},${y} ${x+38},${y+6} ${x+32},${y+14} ${x+28},${y+11} ${x+28},${y+32} ${x+8},${y+32} ${x+8},${y+11} ${x+4},${y+14} ${x-2},${y+6}`,K.blue)+(st?C(x+16,y+17,4.5,'#8a6a4c')+C(x+25,y+23,3.5,'#8a6a4c')+C(x+13,y+26,3,'#8a6a4c')+C(x+22,y+12,2.5,'#8a6a4c'):'');
 const CK=(x,y)=>R(x,y-12,34,12,K.yellow,2)+R(x,y-18,34,7,K.white,3)+C(x+17,y-23,3.5,K.red);
 const WN=(x,y)=>PA(`M${x} ${y} q10 -6 20 0 t20 0`)+PA(`M${x+6} ${y+9} q8 -5 16 0 t16 0`);
 const GF=(x,y)=>R(x-8,y-6,16,12,K.red,1)+L(x,y-6,x,y+6)+L(x-8,y,x+8,y);
@@ -190,47 +199,51 @@ const EV=(x,y)=>R(x-8,y-6,16,12,K.red,1)+C(x,y,2.5,K.yellow);
 const MU=(x,y)=>R(x,y-14,18,14,K.yellow,1)+L(x+4,y-9,x+14,y-9,1)+L(x+4,y-5,x+12,y-5,1);
 const rain=()=>{let r='';for(let i=0;i<10;i++){const x=20+i*18,y=8+(i%3)*12;r+=L(x,y,x-4,y+9,1);}return r;};
 const pair=(item,B,extra)=>{extra=extra||'';return[panel(extra+PE(44,{hand:[68,G-28]})+PE(150,B)+item(68,G-28)),panel(extra+PE(44)+PE(150,Object.assign({hand:[126,G-28]},B))+item(126,G-28))];};
+const STAR=(x,y,r)=>PG(`${x},${y-r} ${x+r*.3},${y-r*.3} ${x+r},${y} ${x+r*.3},${y+r*.3} ${x},${y+r} ${x-r*.3},${y+r*.3} ${x-r},${y} ${x-r*.3},${y-r*.3}`,K.yellow);
+const SHs=(x,y,st,k)=>`<g transform="translate(${x} ${y}) scale(${k})">${SH(0,0,st)}</g>`;
+const BIG=(f,k)=>(x,y)=>`<g transform="translate(${x} ${y}) scale(${k})">${f(0,0)}</g>`;
+const HR=f=>PA('M84 29 A12 12 0 0 1 108 29 L108 50 L103 50 L103 36 L89 36 L89 50 L84 50 Z',f);
 const SC={};
 SC[1]=[panel(TB(112)+BK(40,G)+PE(80,{hand:[56,G-8]})),panel(TB(112)+BK(126,G-34)+PE(80,{hand:[114,G-42]}))];
 SC[2]=[panel(CH(122)+BG(40,G)+PE(84,{hand:[58,G-8]})),panel(CH(122)+BG(126,G-22)+PE(88,{hand:[112,G-30]}))];
-SC[3]=[panel(TB(10,48)+VG(30,G-34)+FR(112,0)+PE(82,{hand:[48,G-40],shirt:K.pink})),panel(TB(10,48)+FR(112,1)+PE(82,{hand:[106,G-44],shirt:K.pink}))];
+SC[3]=[panel(TB(10,48)+VG(30,G-34)+FR(112,0)+PE(82,{hand:[48,G-40],shirt:K.pink,long:1})),panel(TB(10,48)+FR(112,1)+PE(82,{hand:[106,G-44],shirt:K.pink,long:1}))];
 SC[4]=[panel(DRW(132)+C(142,G-62,2.5,K.dark)+CT(84,G-48)+PE(64,{hand:[90,G-48]})),panel(DRW(132)+C(142,G-62,2.5,K.dark)+CT(131,G-62)+PE(92,{hand:[98,G-26]}))];
 SC[5]=[panel(BS(130)+PE(60,{hand:[74,G-70]})+BL(78,G-76)),panel(BL(150,G-30)+BS(130)+PE(60,{hand:[74,G-70]}))];
-SC[6]=[panel(TB(112)+VS(130)+PE(66,{hand:[92,G-52]})+L(94,G-44,94,G-60,1.2)+FW(94,G-62)),panel(TB(112)+L(144,G-52,136,G-68,1.2)+L(144,G-52,146,G-74,1.2)+L(144,G-52,154,G-66,1.2)+FW(136,G-70)+FW(146,G-76)+FW(154,G-68)+VS(130)+PE(66,{hand:[84,G-30]}))];
+SC[6]=[panel(TB(112)+VS(130)+PE(66,{hand:[92,G-52],shirt:K.pink,long:1})+L(94,G-44,94,G-60,1.2)+FW(94,G-62)),panel(TB(112)+L(144,G-52,136,G-68,1.2)+L(144,G-52,146,G-74,1.2)+L(144,G-52,154,G-66,1.2)+FW(136,G-70)+FW(146,G-76)+FW(154,G-68)+VS(130)+PE(66,{hand:[84,G-30],shirt:K.pink,long:1}))];
 const DR7=R(150,G-70,38,70,K.wood,2)+C(180,G-34,2.2,K.woodD);
 SC[7]=[panel(DR7+CAR(6)+PE(86,{hand:[66,G-28]})),panel(DR7+CAR(88)+PE(62,{hand:[82,G-24]}))];
-SC[8]=[panel(PE(100,{s:1.6,pocket:1,hand:[122,G-64]})+R(119,G-71,6,11,K.ink,1)),panel(PE(100,{s:1.6,pocket:1,phoneIn:1,hand:[112,G-46]}))];
+SC[8]=[panel(PE(100,{s:1.6,hand:[124,G-66]})+R(97,50,16,16,K.white,3)+R(117,32,14,24,K.dark,3)+R(119.5,35,9,15,K.white,1)+C(124,53,1.4,K.ink)),panel(PE(100,{s:1.6,hand:[106,G-62]})+R(101,39,9,18,K.dark,3)+R(103,41,5,6,K.white,1)+R(97,50,16,16,K.white,3))];
 const WL=`<rect x="142" y="24" width="46" height="36" fill="none" stroke="${K.dark}" stroke-width="1.2" stroke-dasharray="4 3" rx="2"/>`;
 SC[9]=[panel(WL+MAP(92,G-72)+PE(70,{glass:1,hand:[96,G-56]})),panel(MAP(143,26)+PE(100,{glass:1,hand:[138,G-62]}))];
 SC[10]=[panel(STR()+SU(70,G)+PE(48,{hand:[72,G-10]})),panel(STR()+SU(158,G-48)+PE(148,{g:G-36,hand:[160,G-58]}))];
 SC[11]=[panel(TB(112)+CU(130,G-34)+PE(80,{hand:[112,G-42]})),panel(TB(112)+PG(`124,${G} 138,${G} 132,${G-9}`,K.blue)+PG(`142,${G} 156,${G} 152,${G-6} 146,${G-8}`,K.blue)+PG(`170,${G} 180,${G} 175,${G-5}`,K.blue)+L(130,G-16,124,G-24,1)+L(146,G-16,148,G-25,1)+L(158,G-14,164,G-21,1)+PE(80,{hand:[88,G-68]}))];
 const FRM=R(110,G-78,56,78,K.dark,2);
-SC[12]=[panel(FRM+PG(`110,${G-78} 110,${G} 90,${G-8} 90,${G-70}`,K.wood)+C(94,G-38,2.5,K.woodD)+PE(60,{shirt:K.pink,hand:[88,G-40]})),panel(FRM+R(113,G-75,50,75,K.wood,2)+C(154,G-38,3,K.woodD)+PE(76,{shirt:K.pink,hand:[112,G-40]}))];
+SC[12]=[panel(FRM+PG(`110,${G-78} 110,${G} 90,${G-8} 90,${G-70}`,K.wood)+C(94,G-38,2.5,K.woodD)+PE(60,{shirt:K.pink,long:1,hand:[88,G-40]})),panel(FRM+R(113,G-75,50,75,K.wood,2)+C(154,G-38,3,K.woodD)+PE(76,{shirt:K.pink,long:1,hand:[112,G-40]}))];
 const WGL='#dce8ee';
 SC[13]=[panel(R(108,24,60,52,WGL,2)+L(138,24,138,76)+L(108,50,168,50)+PE(74,{hand:[104,G-56]})),panel(R(108,24,60,52,'#c9d6c4',2)+R(138,24,30,52,WGL,2)+L(138,50,168,50)+PG(`108,24 130,31 130,69 108,76`,WGL)+PE(74,{hand:[104,G-56]}))];
 SC[14]=[panel(TB(112)+GL(132,G-34,1)+PE(80,{hand:[118,G-40]})),panel(TB(112)+GL(132,G-34,0)+PE(80,{hand:[118,G-40]}))];
 SC[15]=[panel(FLR+DOG(120,G)+PE(46,{hand:[70,G-34]})),panel(FLR+C(60,G+6,2.5,'#a58d72')+C(76,G+11,2.5,'#a58d72')+C(92,G+6,2.5,'#a58d72')+C(108,G+11,2.5,'#a58d72')+E(122,G+9,12,3.5,'#a58d72')+DOG(156,G)+PE(46,{hand:[52,G-62]}))];
-SC[16]=[panel(TB(104,56)+SH(116,G-66,1)+PE(72,{hand:[100,G-44]})),panel(L(90,30,194,30,1.2)+R(138,26,3,8,K.wood,1)+SH(130,30,0)+L(112,44,112,52,1)+L(108,48,116,48,1)+L(176,60,176,68,1)+L(172,64,180,64,1)+PE(70,{hand:[96,34]}))];
-SC[17]=[panel(TB(106,66)+CK(120,G-34)+PE(70,{hand:[100,G-44]})),panel(TB(106,66)+E(137,G-36,20,3,K.white)+C(130,G-40,1.3,K.yellow)+C(140,G-41,1.3,K.yellow)+C(146,G-39,1.3,K.red)+PE(70,{hand:[100,G-44]}))];
+SC[16]=[panel(TB(88,80)+SHs(100,30,1,1.5)+PE(52,{hand:[92,G-42]})),panel(L(84,30,190,30,1.2)+SHs(106,31,0,1.5)+R(112,26,3,9,K.wood,1)+R(150,26,3,9,K.wood,1)+STAR(98,58,6)+STAR(172,52,5)+STAR(150,94,6)+C(120,96,2.2,K.blue)+C(142,100,2.2,K.blue)+PE(52,{hand:[92,34]}))];
+SC[17]=[panel(TB(106,66)+CK(120,G-34)+PE(70,{hand:[100,G-44],shirt:K.pink,long:1})),panel(TB(106,66)+E(137,G-36,20,3,K.white)+C(130,G-40,1.3,K.yellow)+C(140,G-41,1.3,K.yellow)+C(146,G-39,1.3,K.red)+PE(70,{hand:[100,G-44],shirt:K.pink,long:1}))];
 const LMP=on=>L(100,0,100,26)+PG('88,36 112,36 106,26 94,26',K.gray)+C(100,40,5,on?K.yellow:K.gray)+(on?L(100,50,100,60,1)+L(90,47,84,55,1)+L(110,47,116,55,1)+L(82,40,74,40,1)+L(118,40,126,40,1):'');
 const SWT=R(150,G-62,16,24,K.white,2)+R(155,G-54,6,10,K.gray,1);
 SC[18]=[panel(LMP(1)+SWT+PE(118,{hand:[150,G-50]})),panel(LMP(0)+SWT+PE(118,{hand:[150,G-50]}),'#d8d4cb')];
 const PP=n=>R(76,G-64,44,30,K.white,2)+[0,1,2,3,4].slice(0,n).map(i=>L(82,G-57+i*5,112-(i%2)*8,G-57+i*5,1)).join('');
 SC[19]=[panel(TB(50,100)+PP(2)+PE(30,{hand:[74,G-44]})),panel(TB(50,100)+PP(5)+PA(`M126 ${G-56} l5 6 l9 -12`,'none',2)+PE(30,{hand:[74,G-44]}))];
 SC[20]=[panel(WN(14,40)+WN(20,76)+PE(110,{hat:1})),panel(WN(14,40)+WN(20,76)+PE(110)+`<g transform="rotate(-22 162 44)">${HAT(162,44)}</g>`+WN(130,64))];
-SC[21]=pair(GF,{shirt:K.pink});
-SC[22]=pair(MN,{shirt:K.yellow});
-SC[23]=pair(BKc,{glass:1,shirt:K.gray});
-SC[24]=[panel(TB(80,80)+R(92,G-38,56,4,K.woodD,1)+C(110,G-47,8,K.red)+PA(`M110 ${G-55} q1 -5 5 -6`)+PE(60,{hand:[90,G-46]})+L(90,G-46,98,G-39,2)),panel(TB(80,80)+R(92,G-38,56,4,K.woodD,1)+[98,108,118,128].map(x=>PG(`${x},${G-38} ${x+9},${G-38} ${x+4.5},${G-48}`,K.red)).join('')+PE(60,{hand:[90,G-46]})+L(90,G-46,98,G-39,2))];
-SC[25]=pair(UMc,{shirt:K.green},rain());
+SC[21]=pair(BIG(GF,1.8),{shirt:K.pink});
+SC[22]=pair(BIG(MN,1.8),{shirt:K.yellow});
+SC[23]=pair(BIG(BKc,1.8),{glass:1,shirt:K.gray});
+SC[24]=[panel(TB(80,80)+R(92,G-38,56,4,K.woodD,1)+C(110,G-47,8,K.red)+PA(`M110 ${G-55} q1 -5 5 -6`)+PE(60,{hand:[90,G-46],shirt:K.pink,long:1})+L(90,G-46,98,G-39,2)),panel(TB(80,80)+R(92,G-38,56,4,K.woodD,1)+[98,108,118,128].map(x=>PG(`${x},${G-38} ${x+9},${G-38} ${x+4.5},${G-48}`,K.red)).join('')+PE(60,{hand:[90,G-46],shirt:K.pink,long:1})+L(90,G-46,98,G-39,2))];
+SC[25]=pair(BIG(UMc,1.3),{shirt:K.green},rain());
 SC[26]=[panel(TB(60,48)+PE(36,{shirt:K.pink})+PE(152,{shirt:K.green,hand:[136,G-34]})+MU(128,G-28)),panel(TB(60,48)+MU(76,G-34)+PE(36,{shirt:K.pink})+PE(130,{shirt:K.green,hand:[110,G-30]}))];
 const BOT=R(150,G-26,14,26,K.yellow,3)+R(153,G-32,8,6,K.woodD,1)+R(152,G-18,10,8,K.white,1);
 const spk=(x,y)=>L(x,y,x,y+7,1.5)+L(x-4,y+3.5,x+4,y+3.5,1.5);
-SC[27]=[panel(BOT+PE(96,{s:1.5,hair:K.ink,hand:[110,G-84]})),panel(BOT+PE(96,{s:1.5,hair:K.yellow,hand:[110,G-84]})+spk(64,24)+spk(130,18)+spk(70,60))];
+SC[27]=[panel(BOT+PE(96,{s:1.5,hair:null,hand:[110,G-84]})+HR(K.ink)),panel(BOT+PE(96,{s:1.5,hair:null,hand:[110,G-84]})+HR('#e6bf5a')+STAR(68,30,6)+STAR(126,20,5)+STAR(70,64,5))];
 const OUT=`<rect x="150" y="0" width="50" height="${G}" fill="#e5ecdf"/>${L(150,0,150,G-72,2)}`;
 SC[28]=[panel(OUT+CH(96)+PE(60,{hand:[96,G-26]})),panel(OUT+CH(160)+PE(108,{hand:[132,G-26]}))];
-SC[29]=pair(EV,{hair:K.gray,bun:1,s:.9,shirt:K.pink});
-SC[30]=[panel(PE(100,{hand:[116,G-64]})+HAT(118,G-64)),panel(PE(100,{hat:1,hand:[110,G-62]}))];
+SC[29]=pair(BIG(EV,1.8),{hair:K.gray,bun:1,s:.9,shirt:K.pink});
+SC[30]=[panel(PE(100,{hand:[116,G-64],shirt:K.pink,long:1})+HAT(118,G-64)),panel(PE(100,{hat:1,hand:[110,G-62],shirt:K.pink,long:1}))];
 
 /* ---------- 多語介面 ---------- */
 const LV=[{tc:'放置類',sc:'放置类',es:'Colocar cosas',en:'Placing things',ex:1},{tc:'結果類',sc:'结果类',es:'Resultados',en:'Results',ex:11},{tc:'處置類',sc:'处置类',es:'Dar y transformar',en:'Giving & changing',ex:21}];
@@ -240,17 +253,17 @@ const I={es:{
  q:'Pregunta',score:'Puntos',combo:'Racha',hint:'Pista (−20)',confirm:'Confirmar',clear:'Borrar',tryAgain:'Casi. ¡Inténtalo otra vez!',correct:'¡Correcto!',wrong:'No es correcto',next:'Siguiente',finish:'Ver resultado',
  qA:'Mira las imágenes y ordena las tarjetas para formar la oración.',qL:'Escucha y elige la imagen de "después".',qP:'Mira las imágenes y elige la oración correcta.',before:'Antes',after:'Después',play:'▶ Escuchar',
  done:'¡Nivel terminado!',yourScore:'Puntos',firstTry:'Correctas a la primera',review:'Para repasar',perfect:'¡Todo a la primera!',replay:'Jugar otra vez',nextLv:'Siguiente nivel',
- lb:'Ranking',player:'Jugador',total:'Total',localNote:'Ranking local (solo este dispositivo).',unlockedMsg:'¡Nivel siguiente desbloqueado!',needStar:'Necesitas al menos 1 estrella para desbloquear el siguiente nivel.',pts:'pts',dict:'Diccionario',close:'Cerrar',slow:'Lento',norm:'Normal',playW:'▶ Palabra por palabra',playS:'▶ Frase completa',vocab:'Vocabulario'},
+ lb:'Ranking',player:'Jugador',total:'Total',localNote:'Ranking local (solo este dispositivo).',unlockedMsg:'¡Nivel siguiente desbloqueado!',needStar:'Necesitas al menos 1 estrella para desbloquear el siguiente nivel.',pts:'pts',dict:'Diccionario',close:'Cerrar',slow:'Lento',norm:'Normal',playW:'▶ Palabra por palabra',playS:'▶ Frase completa',vocab:'Vocabulario',region:'Variante del español'},
 en:{
  sub:'Practice the 把 sentence',name:'Your name',ph:'Type your name',ui:'Language',script:'Characters',read:'Reading',py:'Pinyin',zy:'Zhuyin',off:'Off',start:'Start',pick:'Choose a level',locked:'Locked: earn 1 star on the previous level',rank:'Leaderboard',menu:'Menu',
  formula:'Formula',who:'Who',thing:'Thing',act:'Action + result',begin:'Begin',example:'Example',
  q:'Question',score:'Score',combo:'Streak',hint:'Hint (−20)',confirm:'Check',clear:'Clear',tryAgain:'Almost. Try once more!',correct:'Correct!',wrong:'Not quite',next:'Next',finish:'See results',
  qA:'Look at the pictures and arrange the cards into the sentence.',qL:'Listen and choose the "after" picture.',qP:'Look at the pictures and choose the correct sentence.',before:'Before',after:'After',play:'▶ Listen',
  done:'Level complete!',yourScore:'Score',firstTry:'Right on the first try',review:'To review',perfect:'All right on the first try!',replay:'Play again',nextLv:'Next level',
- lb:'Leaderboard',player:'Player',total:'Total',localNote:'Local leaderboard (this device only).',unlockedMsg:'Next level unlocked!',needStar:'You need at least 1 star to unlock the next level.',pts:'pts',dict:'Dictionary',close:'Close',slow:'Slow',norm:'Normal',playW:'▶ Word by word',playS:'▶ Full sentence',vocab:'Vocabulary'}};
+ lb:'Leaderboard',player:'Player',total:'Total',localNote:'Local leaderboard (this device only).',unlockedMsg:'Next level unlocked!',needStar:'You need at least 1 star to unlock the next level.',pts:'pts',dict:'Dictionary',close:'Close',slow:'Slow',norm:'Normal',playW:'▶ Word by word',playS:'▶ Full sentence',vocab:'Vocabulary',region:'Spanish variant'}};
 
 /* ---------- 狀態 ---------- */
-const cfg0={lang:'es',zh:'tc',read:'none',name:'',speed:'slow'};
+const cfg0={lang:'es',zh:'tc',read:'none',name:'',speed:'slow',region:'la'};
 let cfg;try{cfg=Object.assign({},cfg0,JSON.parse(localStorage.getItem('ba_cfg')||'{}'));}catch(e){cfg=Object.assign({},cfg0);}
 let prog;try{prog=JSON.parse(localStorage.getItem('ba_prog')||'{}');}catch(e){prog={};}
 const ST={screen:'start',lv:0,qs:[],qi:0,score:0,streak:0,firstOK:0,results:[],cur:null,lbRows:null,final:null,look:null,vocab:false,vocabList:[]};
@@ -268,7 +281,7 @@ const zhOf=t=>cfg.zh==='sc'?t.sc:t.tc;
 function tokHTML(t){const z=esc(zhOf(t));const r=cfg.read==='py'?t.py:cfg.read==='zy'?t.zy:'';return `<span class="tk" data-t="${esc(t.tc)}">`+(r?`<ruby>${z}<rt>${esc(r)}</rt></ruby>`:`<span>${z}</span>`)+`</span>`;}
 const seqHTML=a=>a.map(tokHTML).join('');
 const tcText=a=>a.map(t=>t.tc).join('')+'。';
-const trans=s=>cfg.lang==='es'?s.es:s.en;
+const trans=s=>cfg.lang==='es'?((cfg.region==='es'&&SENT_ES[s.id])||s.es):s.en;
 const RATE={slow:.55,normal:.8};
 let spId=0;
 function getVoice(){try{return speechSynthesis.getVoices().find(v=>/zh[-_]TW/i.test(v.lang));}catch(e){return null;}}
@@ -301,7 +314,7 @@ function go(s){ST.screen=s;render();window.scrollTo(0,0);}
 function setCfg(k,v){cfg[k]=v;saveCfg();render();}
 function startGame(){const v=($('nm')?$('nm').value:'').trim();cfg.name=v||(cfg.lang==='es'?'Jugador':'Player');saveCfg();track('ba_start',{lang:cfg.lang,zh:cfg.zh});go('levels');}
 function openLevel(n){if(!isUnlocked(n))return;ST.lv=n;go('intro');}
-function variants(s){const t=s.tok;return[[t[0],t[2],t[1],...t.slice(3)],[t[0],...t.slice(2)],[t[0],t[2],t[3],t[1],...t.slice(4)]];}
+function variants(s){const t=s.tok;return BADPOOL[s.id].map(ix=>ix.map(i=>t[i]));}
 function beginLevel(){
  const pool=shuffle(DATA.filter(d=>d.lv===ST.lv));
  const types=shuffle(['A','A','A','A','A','L','L','L','P','P']);
@@ -369,13 +382,13 @@ function openVocab(){
 }
 function vocabHTML(){
  const t=T();
- const rows=ST.vocabList.map(k=>{const g=GLOSS[k.tc]||['',''];const main=cfg.lang==='es'?g[0]:g[1],other=cfg.lang==='es'?g[1]:g[0];
+ const rows=ST.vocabList.map(k=>{const g=gloss(k.tc);const main=cfg.lang==='es'?g[0]:g[1],other=cfg.lang==='es'?g[1]:g[0];
   return `<div class="vrow"><div class="vz">${esc(zhOf(k))}</div><div class="vm"><div class="vp">${esc(k.py)} · ${esc(k.zy)}</div><div>${esc(main)}</div><div class="vp">${esc(other)}</div></div><button class="vsp" onclick="speakWord('${k.tc}')" aria-label="${t.play}">▶</button></div>`;}).join('');
  return `<div class="sheet" onclick="closeLook()"><div class="sheetcard" onclick="event.stopPropagation()"><div class="row" style="justify-content:space-between"><h2 style="margin:0">${t.vocab}</h2><button class="btn ghost" onclick="closeLook()">${t.close}</button></div><div class="vlist">${rows}</div></div></div>`;
 }
 function sheetHTML(){
  if(ST.vocab)return vocabHTML();
- const k=ST.look;if(!k)return '';const t=T(),g=GLOSS[k.tc]||['',''];
+ const k=ST.look;if(!k)return '';const t=T(),g=gloss(k.tc);
  const main=cfg.lang==='es'?g[0]:g[1],other=cfg.lang==='es'?g[1]:g[0];
  return `<div class="sheet" onclick="closeLook()"><div class="sheetcard" onclick="event.stopPropagation()"><div class="row" style="justify-content:space-between"><div style="font-size:30px">${esc(zhOf(k))}</div><button class="btn ghost" onclick="closeLook()">${t.close}</button></div><div class="tl" style="font-size:16px;margin:4px 0">${esc(k.py)} · ${esc(k.zy)}</div><div style="font-size:18px">${esc(main)}</div><div class="tl">${esc(other)}</div><button class="btn" onclick="speakWord('${k.tc}')">${t.play}</button></div></div>`;
 }
@@ -388,7 +401,7 @@ function renderStart(){
  const t=T();
  return `<div class="card center"><h1>把它放好</h1><div class="sub">Ponlo en su lugar · ${esc(t.sub)}</div></div>
  <div class="card"><div class="lab" style="margin-top:0">${t.name}</div><input id="nm" type="text" maxlength="16" placeholder="${esc(t.ph)}" value="${esc(cfg.name)}">
- <div class="lab">${t.ui}</div><div class="row">${seg('lang','es','Español')}${seg('lang','en','English')}</div>
+ <div class="lab">${t.ui}</div><div class="row">${seg('lang','es','Español')}${seg('lang','en','English')}</div>${cfg.lang==='es'?`<div class="lab">${t.region}</div><div class="row">${seg('region','la','Latinoamérica')}${seg('region','es','España')}</div>`:''}
  <div class="lab">${t.script}</div><div class="row">${seg('zh','tc','繁體')}${seg('zh','sc','简体')}</div>
  <div class="lab">${t.read}</div><div class="row">${seg('read','py',t.py)}${seg('read','zy',t.zy)}${seg('read','none',t.off)}</div>
  <div style="margin-top:16px"><button class="btn primary block" onclick="startGame()">${t.start}</button></div></div>`;

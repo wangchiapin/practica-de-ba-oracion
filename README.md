@@ -20,7 +20,7 @@
 - Cada nivel mezcla **3 tipos de pregunta**:
   - **Ordenar tarjetas**: mira las imágenes y ordena las palabras.
   - **Escuchar y elegir**: oye la oración (palabra por palabra) y elige la imagen de "después".
-  - **Elegir la oración correcta**: una frase correcta y dos con el orden mal puesto.
+  - **Elegir la oración correcta**: una frase correcta y dos incorrectas (solo se usan errores que de verdad no se pueden decir, por ejemplo 把 mal colocado o sin el complemento final; nunca una frase natural sin 把).
 - Todas las imágenes están dibujadas con código (SVG), con un estilo sencillo y limpio.
 
 ### Puntos
@@ -38,6 +38,7 @@ Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **
 
 ### Idiomas y lectura
 - Interfaz en **Español / English**
+- Variante del español: **Latinoamérica / España** (carro/coche, celular/móvil, tarea/deberes, pastel/tarta, piso/suelo…)
 - Caracteres **繁體 / 简体**
 - Lectura en **pinyin / zhuyin (注音) / sin lectura**, con **pronunciación de Taiwán** (según el Diccionario del Ministerio de Educación; con cambio de tono de 一/不)
 - Voz en `zh-TW`, con velocidad **lenta** (por defecto) o normal
@@ -60,7 +61,7 @@ Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **
 
 ### 玩法
 - 共 **30 句、3 關**，每關 10 題：放置類、結果類、處置類
-- 每關混合三種題型：**排字卡**、**聽音選圖**、**選出正確的句子**
+- 每關混合三種題型：**排字卡**、**聽音選圖**、**選出正確的句子**（錯誤選項只用真正不通順的句子，不會拿掉「把」變成另一種自然說法）
 - 圖片全部用程式碼繪製，風格簡單乾淨
 
 ### 計分與結束
@@ -72,6 +73,7 @@ Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **
 
 ### 語言與讀音
 - 介面：Español / English
+- 西班牙文版本：拉丁美洲／西班牙（用詞不同，例如 carro／coche、celular／móvil、piso／suelo）
 - 字體：繁體／简体
 - 讀音：拼音／注音／不顯示，**以台灣讀音為主**（依教育部《國語辭典》，含一、不變調）
 - 語音使用 `zh-TW`，預設慢速，聽音題逐詞念
