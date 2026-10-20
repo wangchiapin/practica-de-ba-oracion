@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>把它放好 · Ponlo en su lugar</title>
+<style>
+:root{--bg:#f6f3ee;--card:#fffdf9;--ink:#3b3a37;--sub:#8a867d;--line:#e1dcd1;--ok:#7f9c85;--okbg:#eef3ec;--bad:#c98b7a;--badbg:#f8eeea;--acc:#e9e2d3}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+#app{max-width:520px;margin:0 auto;padding:14px 14px 40px}
+h1{font-size:28px;margin:6px 0 2px;font-weight:500;letter-spacing:.08em}
+h2{font-size:18px;font-weight:500;margin:0 0 10px}
+.sub{color:var(--sub);font-size:14px;margin-bottom:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.center{text-align:center}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.lab{font-size:13px;color:var(--sub);margin:12px 0 6px}
+input[type=text]{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;font-size:16px;background:#fff;color:var(--ink)}
+.seg{flex:1;min-width:80px;padding:10px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font-size:15px;cursor:pointer}
+.seg.on{background:var(--acc);border-color:#cfc6b2;font-weight:500}
+.btn{padding:11px 18px;border:1px solid #cfc6b2;border-radius:8px;background:#fff;color:var(--ink);font-size:16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.ghost{border-color:var(--line);color:var(--sub);font-size:14px;padding:8px 12px}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.block{display:block;width:100%}
+.bar{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-bottom:10px;font-size:14px}
+.bar .ic{width:38px;height:38px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:18px;color:var(--ink);cursor:pointer}
+.combo{color:var(--ok);font-weight:500}
+.lvcard{display:block;width:100%;text-align:left;padding:14px;margin-bottom:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;color:var(--ink);cursor:pointer;font-size:16px}
+.lvcard:disabled{opacity:.45;cursor:default}
+.lvcard .t{font-size:18px;font-weight:500}
+.lvcard .d{font-size:13px;color:var(--sub);margin-top:2px}
+.stars{color:#c8a96a;letter-spacing:3px;font-size:18px}
+.pair{display:grid;grid-template-columns:1fr 18px 1fr;align-items:center;gap:4px;margin-bottom:8px}
+.pair .ar{text-align:center;color:var(--sub)}
+figure{margin:0}
+figure svg{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:8px}
+figcaption{font-size:12px;color:var(--sub);text-align:center;margin-top:2px}
+.opts3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0}
+.opt3{padding:3px;border:2px solid transparent;border-radius:10px;background:none;cursor:pointer}
+.opt3 svg{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:8px}
+.opt3.ok{border-color:var(--ok)} .opt3.bad{border-color:var(--bad)}
+.qlabel{font-size:14px;color:var(--sub);margin-bottom:8px}
+.slots{min-height:64px;border:1px dashed #cfc6b2;border-radius:10px;padding:8px;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin:8px 0;background:#fff}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;min-height:48px}
+.chip{padding:8px 12px;border:1px solid #cfc6b2;border-radius:8px;background:#fff;font-size:21px;color:var(--ink);cursor:pointer;line-height:1.5}
+.chip.ba{background:var(--acc)}
+ruby{ruby-position:over}
+rt{font-size:.5em;color:var(--sub);font-weight:400;letter-spacing:0}
+.fb{padding:10px 12px;border-radius:8px;margin:10px 0;font-size:15px}
+.fb.ok{background:var(--okbg);color:#4f6b55}
+.fb.bad{background:var(--badbg);color:#8a4f40}
+.sent{font-size:22px;line-height:2.1;margin:6px 0}
+.tl{font-size:14px;color:var(--sub);margin:2px 0 8px}
+.optS{display:block;width:100%;text-align:left;padding:10px 12px;margin:8px 0;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:21px;color:var(--ink);cursor:pointer;line-height:1.9}
+.optS.ok{border-color:var(--ok);background:var(--okbg)} .optS.bad{border-color:var(--bad);background:var(--badbg)}
+.formula{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.formula .f{padding:8px 10px;border:1px solid #cfc6b2;border-radius:8px;background:#fff;font-size:15px;text-align:center}
+.formula .f small{display:block;font-size:11px;color:var(--sub)}
+.formula .f.ba{background:var(--acc);font-size:20px}
+.big{font-size:44px;font-weight:500}
+.lbt{width:100%;border-collapse:collapse;font-size:14px}
+.lbt th,.lbt td{padding:7px 4px;border-bottom:1px solid var(--line);text-align:right}
+.lbt th:nth-child(-n+2),.lbt td:nth-child(-n+2){text-align:left}
+.note{font-size:12px;color:var(--sub);margin-top:8px}
+.rev{border-top:1px solid var(--line);padding-top:10px;margin-top:10px}
+.shake{animation:sh .3s}
+@keyframes sh{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.tools{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.mseg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.mini{padding:6px 9px;border:0;background:#fff;color:var(--sub);font-size:13px;cursor:pointer}
+.tools>.mini{border:1px solid var(--line);border-radius:8px}
+.mini.on{background:var(--acc);color:var(--ink)}
+.sheet{position:fixed;left:0;right:0;top:0;bottom:0;background:rgba(59,58,55,.25);display:flex;align-items:flex-end;justify-content:center;z-index:10}
+.sheetcard{width:100%;max-width:520px;background:var(--card);border-radius:14px 14px 0 0;padding:16px 16px 26px;border:1px solid var(--line)}
+.vlist{max-height:60vh;overflow:auto;margin-top:8px}
+.vrow{display:flex;align-items:center;gap:12px;min-height:60px;padding:8px 0;border-top:1px solid var(--line)}
+.vz{font-size:26px;min-width:74px}
+.vm{flex:1;font-size:15px;line-height:1.5}
+.vm .vp{font-size:13px;color:var(--sub)}
+.vsp{width:48px;height:48px;border:1px solid #cfc6b2;border-radius:10px;background:#fff;font-size:16px;color:var(--ink);cursor:pointer;flex:none}
+.sent .tk{border-bottom:1px dotted #cfc6b2;cursor:pointer}
+@media (prefers-reduced-motion:reduce){.shake{animation:none}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const FIREBASE_CONFIG={apiKey:'YOUR_API_KEY',authDomain:'YOUR_PROJECT_ID.firebaseapp.com',projectId:'YOUR_PROJECT_ID',appId:'YOUR_APP_ID'};
+const GA_ID='';
+const FB_OK=!/^YOUR/.test(FIREBASE_CONFIG.apiKey);
+const UNLOCK=/[?&]unlock=1/.test(location.search);
+
+/* ---------- 資料：30 句 ---------- */
+const BA='把||bǎ|ㄅㄚˇ',W0='我||wǒ|ㄨㄛˇ',TA='他||tā|ㄊㄚ',SHE='她||tā|ㄊㄚ',MA='媽媽|妈妈|mā ma|ㄇㄚ ㄇㄚ˙',LE='了||le|ㄌㄜ˙',SHU='書|书|shū|ㄕㄨ',LS='老師|老师|lǎo shī|ㄌㄠˇ ㄕ',MZ='帽子||mào zi|ㄇㄠˋ ㄗ˙',FJ='放進|放进|fàng jìn|ㄈㄤˋ ㄐㄧㄣˋ',ZZ='放在||fàng zài|ㄈㄤˋ ㄗㄞˋ',BD='搬到||bān dào|ㄅㄢ ㄉㄠˋ',YZ='椅子||yǐ zi|ㄧˇ ㄗ˙',MEN='門|门|mén|ㄇㄣˊ',GG='關上|关上|guān shàng|ㄍㄨㄢ ㄕㄤˋ';
+const RAW=[
+[1,[W0,BA,SHU,ZZ,'桌子上||zhuō zi shàng|ㄓㄨㄛ ㄗ˙ ㄕㄤˋ'],'Puse el libro sobre la mesa.','I put the book on the table.'],
+[2,[TA,BA,'包包||bāo bao|ㄅㄠ ㄅㄠ˙',ZZ,'椅子上||yǐ zi shàng|ㄧˇ ㄗ˙ ㄕㄤˋ'],'Él puso la mochila en la silla.','He put the bag on the chair.'],
+[3,[MA,BA,'菜||cài|ㄘㄞˋ',FJ,'冰箱裡|冰箱里|bīng xiāng lǐ|ㄅㄧㄥ ㄒㄧㄤ ㄌㄧˇ'],'Mamá puso la comida en el refrigerador.','Mom put the vegetables in the fridge.'],
+[4,[W0,BA,'外套||wài tào|ㄨㄞˋ ㄊㄠˋ','掛在|挂在|guà zài|ㄍㄨㄚˋ ㄗㄞˋ','門後面|门后面|mén hòu miàn|ㄇㄣˊ ㄏㄡˋ ㄇㄧㄢˋ'],'Colgué el abrigo detrás de la puerta.','I hung the coat behind the door.'],
+[5,['小明||Xiǎo míng|ㄒㄧㄠˇ ㄇㄧㄥˊ',BA,'球||qiú|ㄑㄧㄡˊ','丟進|丢进|diū jìn|ㄉㄧㄡ ㄐㄧㄣˋ','籃子裡|篮子里|lán zi lǐ|ㄌㄢˊ ㄗ˙ ㄌㄧˇ'],'Xiaoming tiró la pelota a la canasta.','Xiaoming threw the ball into the basket.'],
+[6,[SHE,BA,'花||huā|ㄏㄨㄚ','插在||chā zài|ㄔㄚ ㄗㄞˋ','花瓶裡|花瓶里|huā píng lǐ|ㄏㄨㄚ ㄆㄧㄥˊ ㄌㄧˇ'],'Ella puso las flores en el florero.','She put the flowers in the vase.'],
+[7,['爸爸||bà ba|ㄅㄚˋ ㄅㄚ˙',BA,'車|车|chē|ㄔㄜ','停在||tíng zài|ㄊㄧㄥˊ ㄗㄞˋ','門口|门口|mén kǒu|ㄇㄣˊ ㄎㄡˇ'],'Papá estacionó el carro en la entrada.','Dad parked the car at the entrance.'],
+[8,[W0,BA,'手機|手机|shǒu jī|ㄕㄡˇ ㄐㄧ',FJ,'口袋||kǒu dài|ㄎㄡˇ ㄉㄞˋ'],'Guardé el celular en el bolsillo.','I put my phone in my pocket.'],
+[9,[LS,BA,'地圖|地图|dì tú|ㄉㄧˋ ㄊㄨˊ','貼在|贴在|tiē zài|ㄊㄧㄝ ㄗㄞˋ','牆上|墙上|qiáng shàng|ㄑㄧㄤˊ ㄕㄤˋ'],'La maestra pegó el mapa en la pared.','The teacher put the map up on the wall.'],
+[10,[TA,BA,'行李||xíng lǐ|ㄒㄧㄥˊ ㄌㄧˇ',BD,'樓上|楼上|lóu shàng|ㄌㄡˊ ㄕㄤˋ'],'Él subió el equipaje al piso de arriba.','He carried the luggage upstairs.'],
+[11,[TA,BA,'杯子||bēi zi|ㄅㄟ ㄗ˙','打破||dǎ pò|ㄉㄚˇ ㄆㄛˋ',LE],'Él rompió la taza.','He broke the cup.'],
+[12,[MA,BA,MEN,GG,LE],'Mamá cerró la puerta.','Mom closed the door.'],
+[13,[W0,BA,'窗戶|窗户|chuāng hù|ㄔㄨㄤ ㄏㄨˋ','打開|打开|dǎ kāi|ㄉㄚˇ ㄎㄞ',LE],'Abrí la ventana.','I opened the window.'],
+[14,['弟弟||dì di|ㄉㄧˋ ㄉㄧ˙',BA,'牛奶||niú nǎi|ㄋㄧㄡˊ ㄋㄞˇ','喝完||hē wán|ㄏㄜ ㄨㄢˊ',LE],'Mi hermano se terminó la leche.','My little brother finished the milk.'],
+[15,['小狗||xiǎo gǒu|ㄒㄧㄠˇ ㄍㄡˇ',BA,'地板||dì bǎn|ㄉㄧˋ ㄅㄢˇ','弄髒|弄脏|nòng zāng|ㄋㄨㄥˋ ㄗㄤ',LE],'El perrito ensució el piso.','The puppy made the floor dirty.'],
+[16,[W0,BA,'衣服||yī fu|ㄧ ㄈㄨ˙','洗乾淨|洗干净|xǐ gān jìng|ㄒㄧˇ ㄍㄢ ㄐㄧㄥˋ',LE],'Lavé la ropa hasta dejarla limpia.','I washed the clothes clean.'],
+[17,[SHE,BA,'蛋糕||dàn gāo|ㄉㄢˋ ㄍㄠ','吃完||chī wán|ㄔ ㄨㄢˊ',LE],'Ella se comió todo el pastel.','She finished the cake.'],
+[18,[TA,BA,'燈|灯|dēng|ㄉㄥ','關掉|关掉|guān diào|ㄍㄨㄢ ㄉㄧㄠˋ',LE],'Él apagó la luz.','He turned off the light.'],
+[19,[W0,BA,'作業|作业|zuò yè|ㄗㄨㄛˋ ㄧㄝˋ','寫完|写完|xiě wán|ㄒㄧㄝˇ ㄨㄢˊ',LE],'Terminé la tarea.','I finished my homework.'],
+[20,['風|风|fēng|ㄈㄥ',BA,MZ,'吹走||chuī zǒu|ㄔㄨㄟ ㄗㄡˇ',LE],'El viento se llevó el sombrero.','The wind blew the hat away.'],
+[21,[W0,BA,'禮物|礼物|lǐ wù|ㄌㄧˇ ㄨˋ','送給|送给|sòng gěi|ㄙㄨㄥˋ ㄍㄟˇ','朋友||péng yǒu|ㄆㄥˊ ㄧㄡˇ'],'Le regalé el regalo a mi amigo.','I gave the gift to my friend.'],
+[22,[TA,BA,'錢|钱|qián|ㄑㄧㄢˊ','還給|还给|huán gěi|ㄏㄨㄢˊ ㄍㄟˇ',W0,LE],'Él me devolvió el dinero.','He gave the money back to me.'],
+[23,['請你|请你|qǐng nǐ|ㄑㄧㄥˇ ㄋㄧˇ',BA,SHU,'拿給|拿给|ná gěi|ㄋㄚˊ ㄍㄟˇ',LS],'Por favor, dale el libro a la maestra.','Please hand the book to the teacher.'],
+[24,[MA,BA,'蘋果|苹果|píng guǒ|ㄆㄧㄥˊ ㄍㄨㄛˇ','切成||qiē chéng|ㄑㄧㄝ ㄔㄥˊ','小塊|小块|xiǎo kuài|ㄒㄧㄠˇ ㄎㄨㄞˋ'],'Mamá cortó la manzana en trozos.','Mom cut the apple into small pieces.'],
+[25,[W0,BA,'雨傘|雨伞|yǔ sǎn|ㄩˇ ㄙㄢˇ','借給|借给|jiè gěi|ㄐㄧㄝˋ ㄍㄟˇ',TA,LE],'Le presté el paraguas.','I lent him my umbrella.'],
+[26,['老闆|老板|lǎo bǎn|ㄌㄠˇ ㄅㄢˇ',BA,'菜單|菜单|cài dān|ㄘㄞˋ ㄉㄢ','拿來|拿来|ná lái|ㄋㄚˊ ㄌㄞˊ',LE],'El jefe trajo el menú.','The boss brought the menu.'],
+[27,[SHE,BA,'頭髮|头发|tóu fà|ㄊㄡˊ ㄈㄚˋ','染成||rǎn chéng|ㄖㄢˇ ㄔㄥˊ','金色||jīn sè|ㄐㄧㄣ ㄙㄜˋ'],'Ella se tiñó el pelo de rubio.','She dyed her hair blond.'],
+[28,['請|请|qǐng|ㄑㄧㄥˇ',BA,YZ,BD,'外面去||wài miàn qù|ㄨㄞˋ ㄇㄧㄢˋ ㄑㄩˋ'],'Por favor, saca la silla afuera.','Please move the chair outside.'],
+[29,[TA,BA,'紅包|红包|hóng bāo|ㄏㄨㄥˊ ㄅㄠ','交給|交给|jiāo gěi|ㄐㄧㄠ ㄍㄟˇ','奶奶||nǎi nai|ㄋㄞˇ ㄋㄞ˙'],'Él le entregó el sobre rojo a la abuela.','He handed the red envelope to Grandma.'],
+[30,[SHE,BA,MZ,'戴在||dài zài|ㄉㄞˋ ㄗㄞˋ','頭上|头上|tóu shàng|ㄊㄡˊ ㄕㄤˋ'],'Ella se puso el sombrero en la cabeza.','She put the hat on her head.']
+];
+const DATA=RAW.map(([id,tk,es,en])=>({id,lv:Math.ceil(id/10),es,en,tok:tk.map(s=>{const [tc,sc,py,zy]=s.split('|');return{tc,sc:sc||tc,py,zy};})}));
+
+const GLOSS={'我':['yo','I'],'把':['palabra clave: pone el objeto antes del verbo','key word: puts the object before the verb'],'書':['libro','book'],'放在':['poner en (un lugar)','put (somewhere)'],'桌子上':['sobre la mesa','on the table'],'他':['él','he'],'包包':['bolso, mochila','bag'],'椅子上':['sobre la silla','on the chair'],'椅子':['silla','chair'],'媽媽':['mamá','mom'],'菜':['verduras, comida','vegetables, dish'],'放進':['meter, poner dentro','put into'],'冰箱裡':['dentro del refrigerador','inside the fridge'],'外套':['abrigo, chaqueta','coat'],'掛在':['colgar en','hang on'],'門後面':['detrás de la puerta','behind the door'],'小明':['Xiaoming (nombre)','Xiaoming (a name)'],'球':['pelota','ball'],'丟進':['tirar dentro de','throw into'],'籃子裡':['dentro de la canasta','in the basket'],'她':['ella','she'],'花':['flor, flores','flower(s)'],'插在':['colocar (insertar) en','stick in'],'花瓶裡':['dentro del florero','in the vase'],'爸爸':['papá','dad'],'車':['carro, auto','car'],'停在':['estacionar en','park at'],'門口':['entrada','entrance'],'手機':['celular','cell phone'],'口袋':['bolsillo','pocket'],'老師':['maestro, maestra','teacher'],'地圖':['mapa','map'],'貼在':['pegar en','stick on'],'牆上':['en la pared','on the wall'],'行李':['equipaje','luggage'],'搬到':['llevar (cargando) hasta','carry to'],'樓上':['piso de arriba','upstairs'],'杯子':['taza, vaso','cup'],'打破':['romper','break'],'了':['partícula: acción completada','particle: completed action'],'門':['puerta','door'],'關上':['cerrar','close'],'窗戶':['ventana','window'],'打開':['abrir','open'],'弟弟':['hermano menor','younger brother'],'牛奶':['leche','milk'],'喝完':['terminar de beber','finish drinking'],'小狗':['perrito','puppy'],'地板':['piso','floor'],'弄髒':['ensuciar','make dirty'],'衣服':['ropa','clothes'],'洗乾淨':['lavar hasta dejar limpio','wash clean'],'蛋糕':['pastel','cake'],'吃完':['terminar de comer','finish eating'],'燈':['luz, lámpara','light'],'關掉':['apagar','turn off'],'作業':['tarea','homework'],'寫完':['terminar de escribir','finish writing'],'風':['viento','wind'],'帽子':['sombrero, gorra','hat'],'吹走':['llevarse (soplando)','blow away'],'禮物':['regalo','gift'],'送給':['regalar a','give (as a gift) to'],'朋友':['amigo, amiga','friend'],'錢':['dinero','money'],'還給':['devolver a','return to'],'請你':['por favor (tú)','please (you)'],'拿給':['dar (algo en la mano) a','hand to'],'蘋果':['manzana','apple'],'切成':['cortar en','cut into'],'小塊':['trozos pequeños','small pieces'],'雨傘':['paraguas','umbrella'],'借給':['prestar a','lend to'],'老闆':['jefe, dueño','boss'],'菜單':['menú','menu'],'拿來':['traer','bring'],'頭髮':['pelo, cabello','hair'],'染成':['teñir de','dye (a color)'],'金色':['rubio, dorado','blond, golden'],'請':['por favor','please'],'外面去':['ir (hacia) afuera','to the outside'],'紅包':['sobre rojo','red envelope'],'交給':['entregar a','hand over to'],'奶奶':['abuela (paterna)','grandma'],'戴在':['ponerse (sombrero) en','wear on'],'頭上':['en la cabeza','on the head']};
+const TOKMAP={};DATA.forEach(d=>d.tok.forEach(t=>{if(!TOKMAP[t.tc])TOKMAP[t.tc]=t;}));
+
+/* ---------- 圖：程式碼直接畫 ---------- */
+const G=112;
+const K={ink:'#4a4946',wood:'#dccdb2',woodD:'#b9a584',red:'#cf8f7f',blue:'#9db6c4',green:'#a9bda0',yellow:'#e9d59c',gray:'#dcd9d2',dark:'#8f8c86',skin:'#f3dcc8',white:'#fbf9f5',pink:'#e6aabb'};
+const sw='stroke="'+K.ink+'" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"';
+const R=(x,y,w,h,f,rx=2)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" fill="${f}" ${sw}/>`;
+const C=(x,y,r,f)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${f}" ${sw}/>`;
+const L=(x1,y1,x2,y2,w)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${K.ink}" stroke-width="${w||1.3}" stroke-linecap="round"/>`;
+const PG=(p,f)=>`<polygon points="${p}" fill="${f}" ${sw}/>`;
+const PA=(d,f,w)=>`<path d="${d}" fill="${f||'none'}" stroke="${K.ink}" stroke-width="${w||1.3}" stroke-linecap="round" stroke-linejoin="round"/>`;
+const E=(x,y,rx,ry,f)=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${f}" ${sw}/>`;
+const panel=(inner,bg)=>`<svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg" role="img"><rect width="200" height="130" fill="${bg||K.white}"/>${L(6,G,194,G,1)}${inner}</svg>`;
+const HAT=(x,y)=>R(x-7,y-10,14,10,K.red,3)+E(x,y,13,3.2,K.red);
+function PE(x,o={}){
+ const s=o.s||1,g=o.g===undefined?G:o.g,sh=o.shirt||K.blue,hair=o.hair===undefined?K.ink:o.hair;
+ let hx=10,hy=-26;if(o.hand){hx=(o.hand[0]-x)/s;hy=(o.hand[1]-g)/s;}
+ const dr=hx<0?-1:1;
+ let t=`<g transform="translate(${x} ${g}) scale(${s})">`;
+ t+=L(-5,0,-5,-26,2)+L(5,0,5,-26,2)+R(-9,-48,18,23,sh,4);
+ if(o.pocket)t+=R(1,-38,8,8,K.white,1);
+ if(o.phoneIn)t+=R(3,-42,4,9,K.ink,1);
+ t+=L(0,-44,-dr*9,-27,2.2)+L(0,-44,hx,hy,2.2)+C(hx,hy,2.3,K.skin);
+ t+=C(0,-56,8,K.skin);
+ if(hair)t+=`<path d="M-8 -57 A8 8 0 0 1 8 -57 Z" fill="${hair}" ${sw}/>`;
+ if(o.bun)t+=C(0,-67,4,hair||K.gray);
+ if(o.glass)t+=C(-3.6,-55,2.8,'none')+C(3.6,-55,2.8,'none')+L(-0.8,-55,0.8,-55,1);
+ if(o.hat)t+=HAT(0,-61);
+ return t+'</g>';
+}
+const TB=(x,w=56)=>R(x,G-34,w,5,K.wood,1)+R(x+4,G-29,4,29,K.woodD,1)+R(x+w-8,G-29,4,29,K.woodD,1);
+const CH=x=>R(x,G-44,4,44,K.woodD,1)+R(x,G-22,28,4,K.wood,1)+R(x+24,G-18,4,18,K.woodD,1);
+const BK=(x,y)=>R(x,y-10,24,10,K.red,1)+L(x+4,y-10,x+4,y,1);
+const BG=(x,y)=>PA(`M${x+5} ${y-14} C${x+5} ${y-24} ${x+17} ${y-24} ${x+17} ${y-14}`)+R(x,y-14,22,14,K.blue,4);
+const CU=(x,y)=>PG(`${x},${y-12} ${x+14},${y-12} ${x+11},${y} ${x+3},${y}`,K.blue)+PA(`M${x+14} ${y-9} q6 1 0 7`);
+const VG=(x,y)=>C(x,y-6,6,K.green)+C(x+10,y-5,5,K.green)+PA(`M${x} ${y-12} q2 -4 5 -4`);
+const FR=(x,veg)=>R(x,G-82,44,82,K.white,3)+R(x+4,G-78,36,74,K.gray,2)+L(x+4,G-56,x+40,G-56,1)+L(x+4,G-34,x+40,G-34,1)+(veg?VG(x+12,G-34):'')+PG(`${x+44},${G-82} ${x+60},${G-74} ${x+60},${G-6} ${x+44},${G}`,K.white);
+const DRW=x=>R(x,G-78,42,78,K.wood,2)+C(x+34,G-38,2.5,K.woodD);
+const CT=(x,y)=>PG(`${x},${y} ${x+22},${y} ${x+26},${y+34} ${x-4},${y+34}`,K.blue)+L(x+11,y,x+11,y+34,1);
+const BS=x=>PG(`${x},${G-26} ${x+40},${G-26} ${x+34},${G} ${x+6},${G}`,K.wood)+L(x+3,G-14,x+37,G-14,1)+L(x+20,G-26,x+20,G,1);
+const BL=(x,y)=>C(x,y,6,K.yellow)+PA(`M${x-6} ${y} q6 -4 12 0`,'none',1);
+const VS=x=>PG(`${x+4},${G-34} ${x+20},${G-34} ${x+22},${G-46} ${x+16},${G-52} ${x+8},${G-52} ${x+2},${G-46}`,K.blue);
+const FW=(x,y)=>C(x,y,4,K.pink);
+const CAR=x=>R(x,G-24,56,16,K.blue,4)+PG(`${x+12},${G-24} ${x+20},${G-38} ${x+42},${G-38} ${x+48},${G-24}`,K.blue)+C(x+14,G-8,6,K.gray)+C(x+42,G-8,6,K.gray);
+const MAP=(x,y)=>R(x,y,44,32,K.yellow,2)+L(x+6,y+10,x+38,y+10,1)+L(x+6,y+18,x+30,y+18,1)+L(x+6,y+26,x+34,y+26,1)+C(x+34,y+22,2,K.red);
+const STR=()=>R(100,G-12,80,12,K.gray,1)+R(120,G-24,60,12,K.gray,1)+R(140,G-36,40,12,K.gray,1)+R(160,G-48,20,12,K.gray,1);
+const SU=(x,y)=>R(x,y-18,26,18,K.red,3)+PA(`M${x+8} ${y-18} v-4 h10 v4`);
+const GL=(x,y,m)=>PG(`${x},${y-18} ${x+14},${y-18} ${x+12},${y} ${x+2},${y}`,K.white)+(m?PG(`${x+1.3},${y-12} ${x+12.7},${y-12} ${x+11.4},${y-1.2} ${x+2.6},${y-1.2}`,'#e8e3d3'):'');
+const FLR='<rect x="0" y="'+G+'" width="200" height="18" fill="#ebe7df"/>';
+const DOG=(x,y)=>E(x,y-14,16,9,K.wood)+L(x-8,y-6,x-8,y,2)+L(x+8,y-6,x+8,y,2)+PA(`M${x-16} ${y-16} q-8 -4 -8 -10`)+C(x+16,y-22,7,K.wood)+PG(`${x+19},${y-29} ${x+24},${y-24} ${x+20},${y-22}`,K.woodD)+C(x+19,y-23,1,K.ink);
+const SH=(x,y,st)=>PG(`${x+8},${y} ${x+14},${y+5} ${x+22},${y+5} ${x+28},${y} ${x+38},${y+6} ${x+32},${y+14} ${x+28},${y+11} ${x+28},${y+32} ${x+8},${y+32} ${x+8},${y+11} ${x+4},${y+14} ${x-2},${y+6}`,K.blue)+(st?C(x+16,y+18,3,'#a58d72')+C(x+24,y+24,2.5,'#a58d72')+C(x+13,y+26,2,'#a58d72'):'');
+const CK=(x,y)=>R(x,y-12,34,12,K.yellow,2)+R(x,y-18,34,7,K.white,3)+C(x+17,y-23,3.5,K.red);
+const WN=(x,y)=>PA(`M${x} ${y} q10 -6 20 0 t20 0`)+PA(`M${x+6} ${y+9} q8 -5 16 0 t16 0`);
+const GF=(x,y)=>R(x-8,y-6,16,12,K.red,1)+L(x,y-6,x,y+6)+L(x-8,y,x+8,y);
+const MN=(x,y)=>R(x-11,y-6,22,12,K.green,1)+C(x,y,3,K.white);
+const BKc=(x,y)=>R(x-12,y-5,24,10,K.red,1)+L(x-8,y-5,x-8,y+5,1);
+const UMc=(x,y)=>PG(`${x-2},${y-18} ${x+2},${y-18} ${x+5},${y+10} ${x-5},${y+10}`,K.blue)+L(x,y+10,x,y+18)+PA(`M${x} ${y+18} q0 4 -4 4`);
+const EV=(x,y)=>R(x-8,y-6,16,12,K.red,1)+C(x,y,2.5,K.yellow);
+const MU=(x,y)=>R(x,y-14,18,14,K.yellow,1)+L(x+4,y-9,x+14,y-9,1)+L(x+4,y-5,x+12,y-5,1);
+const rain=()=>{let r='';for(let i=0;i<10;i++){const x=20+i*18,y=8+(i%3)*12;r+=L(x,y,x-4,y+9,1);}return r;};
+const pair=(item,B,extra)=>{extra=extra||'';return[panel(extra+PE(44,{hand:[68,G-28]})+PE(150,B)+item(68,G-28)),panel(extra+PE(44)+PE(150,Object.assign({hand:[126,G-28]},B))+item(126,G-28))];};
+const SC={};
+SC[1]=[panel(TB(112)+BK(40,G)+PE(80,{hand:[56,G-8]})),panel(TB(112)+BK(126,G-34)+PE(80,{hand:[114,G-42]}))];
+SC[2]=[panel(CH(122)+BG(40,G)+PE(84,{hand:[58,G-8]})),panel(CH(122)+BG(126,G-22)+PE(88,{hand:[112,G-30]}))];
+SC[3]=[panel(TB(10,48)+VG(30,G-34)+FR(112,0)+PE(82,{hand:[48,G-40],shirt:K.pink})),panel(TB(10,48)+FR(112,1)+PE(82,{hand:[106,G-44],shirt:K.pink}))];
+SC[4]=[panel(DRW(132)+C(142,G-62,2.5,K.dark)+CT(84,G-48)+PE(64,{hand:[90,G-48]})),panel(DRW(132)+C(142,G-62,2.5,K.dark)+CT(131,G-62)+PE(92,{hand:[98,G-26]}))];
+SC[5]=[panel(BS(130)+PE(60,{hand:[74,G-70]})+BL(78,G-76)),panel(BL(150,G-30)+BS(130)+PE(60,{hand:[74,G-70]}))];
+SC[6]=[panel(TB(112)+VS(130)+PE(66,{hand:[92,G-52]})+L(94,G-44,94,G-60,1.2)+FW(94,G-62)),panel(TB(112)+L(144,G-52,136,G-68,1.2)+L(144,G-52,146,G-74,1.2)+L(144,G-52,154,G-66,1.2)+FW(136,G-70)+FW(146,G-76)+FW(154,G-68)+VS(130)+PE(66,{hand:[84,G-30]}))];
+const DR7=R(150,G-70,38,70,K.wood,2)+C(180,G-34,2.2,K.woodD);
+SC[7]=[panel(DR7+CAR(6)+PE(86,{hand:[66,G-28]})),panel(DR7+CAR(88)+PE(62,{hand:[82,G-24]}))];
+SC[8]=[panel(PE(100,{s:1.6,pocket:1,hand:[122,G-64]})+R(119,G-71,6,11,K.ink,1)),panel(PE(100,{s:1.6,pocket:1,phoneIn:1,hand:[112,G-46]}))];
+const WL=`<rect x="142" y="24" width="46" height="36" fill="none" stroke="${K.dark}" stroke-width="1.2" stroke-dasharray="4 3" rx="2"/>`;
+SC[9]=[panel(WL+MAP(92,G-72)+PE(70,{glass:1,hand:[96,G-56]})),panel(MAP(143,26)+PE(100,{glass:1,hand:[138,G-62]}))];
+SC[10]=[panel(STR()+SU(70,G)+PE(48,{hand:[72,G-10]})),panel(STR()+SU(158,G-48)+PE(148,{g:G-36,hand:[160,G-58]}))];
+SC[11]=[panel(TB(112)+CU(130,G-34)+PE(80,{hand:[112,G-42]})),panel(TB(112)+PG(`124,${G} 138,${G} 132,${G-9}`,K.blue)+PG(`142,${G} 156,${G} 152,${G-6} 146,${G-8}`,K.blue)+PG(`170,${G} 180,${G} 175,${G-5}`,K.blue)+L(130,G-16,124,G-24,1)+L(146,G-16,148,G-25,1)+L(158,G-14,164,G-21,1)+PE(80,{hand:[88,G-68]}))];
+const FRM=R(110,G-78,56,78,K.dark,2);
+SC[12]=[panel(FRM+PG(`110,${G-78} 110,${G} 90,${G-8} 90,${G-70}`,K.wood)+C(94,G-38,2.5,K.woodD)+PE(60,{shirt:K.pink,hand:[88,G-40]})),panel(FRM+R(113,G-75,50,75,K.wood,2)+C(154,G-38,3,K.woodD)+PE(76,{shirt:K.pink,hand:[112,G-40]}))];
+const WGL='#dce8ee';
+SC[13]=[panel(R(108,24,60,52,WGL,2)+L(138,24,138,76)+L(108,50,168,50)+PE(74,{hand:[104,G-56]})),panel(R(108,24,60,52,'#c9d6c4',2)+R(138,24,30,52,WGL,2)+L(138,50,168,50)+PG(`108,24 130,31 130,69 108,76`,WGL)+PE(74,{hand:[104,G-56]}))];
+SC[14]=[panel(TB(112)+GL(132,G-34,1)+PE(80,{hand:[118,G-40]})),panel(TB(112)+GL(132,G-34,0)+PE(80,{hand:[118,G-40]}))];
+SC[15]=[panel(FLR+DOG(120,G)+PE(46,{hand:[70,G-34]})),panel(FLR+C(60,G+6,2.5,'#a58d72')+C(76,G+11,2.5,'#a58d72')+C(92,G+6,2.5,'#a58d72')+C(108,G+11,2.5,'#a58d72')+E(122,G+9,12,3.5,'#a58d72')+DOG(156,G)+PE(46,{hand:[52,G-62]}))];
+SC[16]=[panel(TB(104,56)+SH(116,G-66,1)+PE(72,{hand:[100,G-44]})),panel(L(90,30,194,30,1.2)+R(138,26,3,8,K.wood,1)+SH(130,30,0)+L(112,44,112,52,1)+L(108,48,116,48,1)+L(176,60,176,68,1)+L(172,64,180,64,1)+PE(70,{hand:[96,34]}))];
+SC[17]=[panel(TB(106,66)+CK(120,G-34)+PE(70,{hand:[100,G-44]})),panel(TB(106,66)+E(137,G-36,20,3,K.white)+C(130,G-40,1.3,K.yellow)+C(140,G-41,1.3,K.yellow)+C(146,G-39,1.3,K.red)+PE(70,{hand:[100,G-44]}))];
+const LMP=on=>L(100,0,100,26)+PG('88,36 112,36 106,26 94,26',K.gray)+C(100,40,5,on?K.yellow:K.gray)+(on?L(100,50,100,60,1)+L(90,47,84,55,1)+L(110,47,116,55,1)+L(82,40,74,40,1)+L(118,40,126,40,1):'');
+const SWT=R(150,G-62,16,24,K.white,2)+R(155,G-54,6,10,K.gray,1);
+SC[18]=[panel(LMP(1)+SWT+PE(118,{hand:[150,G-50]})),panel(LMP(0)+SWT+PE(118,{hand:[150,G-50]}),'#d8d4cb')];
+const PP=n=>R(76,G-64,44,30,K.white,2)+[0,1,2,3,4].slice(0,n).map(i=>L(82,G-57+i*5,112-(i%2)*8,G-57+i*5,1)).join('');
+SC[19]=[panel(TB(50,100)+PP(2)+PE(30,{hand:[74,G-44]})),panel(TB(50,100)+PP(5)+PA(`M126 ${G-56} l5 6 l9 -12`,'none',2)+PE(30,{hand:[74,G-44]}))];
+SC[20]=[panel(WN(14,40)+WN(20,76)+PE(110,{hat:1})),panel(WN(14,40)+WN(20,76)+PE(110)+`<g transform="rotate(-22 162 44)">${HAT(162,44)}</g>`+WN(130,64))];
+SC[21]=pair(GF,{shirt:K.pink});
+SC[22]=pair(MN,{shirt:K.yellow});
+SC[23]=pair(BKc,{glass:1,shirt:K.gray});
+SC[24]=[panel(TB(80,80)+R(92,G-38,56,4,K.woodD,1)+C(110,G-47,8,K.red)+PA(`M110 ${G-55} q1 -5 5 -6`)+PE(60,{hand:[90,G-46]})+L(90,G-46,98,G-39,2)),panel(TB(80,80)+R(92,G-38,56,4,K.woodD,1)+[98,108,118,128].map(x=>PG(`${x},${G-38} ${x+9},${G-38} ${x+4.5},${G-48}`,K.red)).join('')+PE(60,{hand:[90,G-46]})+L(90,G-46,98,G-39,2))];
+SC[25]=pair(UMc,{shirt:K.green},rain());
+SC[26]=[panel(TB(60,48)+PE(36,{shirt:K.pink})+PE(152,{shirt:K.green,hand:[136,G-34]})+MU(128,G-28)),panel(TB(60,48)+MU(76,G-34)+PE(36,{shirt:K.pink})+PE(130,{shirt:K.green,hand:[110,G-30]}))];
+const BOT=R(150,G-26,14,26,K.yellow,3)+R(153,G-32,8,6,K.woodD,1)+R(152,G-18,10,8,K.white,1);
+const spk=(x,y)=>L(x,y,x,y+7,1.5)+L(x-4,y+3.5,x+4,y+3.5,1.5);
+SC[27]=[panel(BOT+PE(96,{s:1.5,hair:K.ink,hand:[110,G-84]})),panel(BOT+PE(96,{s:1.5,hair:K.yellow,hand:[110,G-84]})+spk(64,24)+spk(130,18)+spk(70,60))];
+const OUT=`<rect x="150" y="0" width="50" height="${G}" fill="#e5ecdf"/>${L(150,0,150,G-72,2)}`;
+SC[28]=[panel(OUT+CH(96)+PE(60,{hand:[96,G-26]})),panel(OUT+CH(160)+PE(108,{hand:[132,G-26]}))];
+SC[29]=pair(EV,{hair:K.gray,bun:1,s:.9,shirt:K.pink});
+SC[30]=[panel(PE(100,{hand:[116,G-64]})+HAT(118,G-64)),panel(PE(100,{hat:1,hand:[110,G-62]}))];
+
+/* ---------- 多語介面 ---------- */
+const LV=[{tc:'放置類',sc:'放置类',es:'Colocar cosas',en:'Placing things',ex:1},{tc:'結果類',sc:'结果类',es:'Resultados',en:'Results',ex:11},{tc:'處置類',sc:'处置类',es:'Dar y transformar',en:'Giving & changing',ex:21}];
+const I={es:{
+ sub:'Practica la oración con 把',name:'Tu nombre',ph:'Escribe tu nombre',ui:'Idioma',script:'Caracteres',read:'Lectura',py:'Pinyin',zy:'Zhuyin',off:'Sin lectura',start:'Empezar',pick:'Elige un nivel',locked:'Bloqueado: consigue 1 estrella en el nivel anterior',rank:'Ranking',menu:'Menú',
+ formula:'Fórmula',who:'Quién',thing:'Cosa',act:'Acción + resultado',begin:'Comenzar',example:'Ejemplo',
+ q:'Pregunta',score:'Puntos',combo:'Racha',hint:'Pista (−20)',confirm:'Confirmar',clear:'Borrar',tryAgain:'Casi. ¡Inténtalo otra vez!',correct:'¡Correcto!',wrong:'No es correcto',next:'Siguiente',finish:'Ver resultado',
+ qA:'Mira las imágenes y ordena las tarjetas para formar la oración.',qL:'Escucha y elige la imagen de "después".',qP:'Mira las imágenes y elige la oración correcta.',before:'Antes',after:'Después',play:'▶ Escuchar',
+ done:'¡Nivel terminado!',yourScore:'Puntos',firstTry:'Correctas a la primera',review:'Para repasar',perfect:'¡Todo a la primera!',replay:'Jugar otra vez',nextLv:'Siguiente nivel',
+ lb:'Ranking',player:'Jugador',total:'Total',localNote:'Ranking local (solo este dispositivo).',unlockedMsg:'¡Nivel siguiente desbloqueado!',needStar:'Necesitas al menos 1 estrella para desbloquear el siguiente nivel.',pts:'pts',dict:'Diccionario',close:'Cerrar',slow:'Lento',norm:'Normal',playW:'▶ Palabra por palabra',playS:'▶ Frase completa',vocab:'Vocabulario'},
+en:{
+ sub:'Practice the 把 sentence',name:'Your name',ph:'Type your name',ui:'Language',script:'Characters',read:'Reading',py:'Pinyin',zy:'Zhuyin',off:'Off',start:'Start',pick:'Choose a level',locked:'Locked: earn 1 star on the previous level',rank:'Leaderboard',menu:'Menu',
+ formula:'Formula',who:'Who',thing:'Thing',act:'Action + result',begin:'Begin',example:'Example',
+ q:'Question',score:'Score',combo:'Streak',hint:'Hint (−20)',confirm:'Check',clear:'Clear',tryAgain:'Almost. Try once more!',correct:'Correct!',wrong:'Not quite',next:'Next',finish:'See results',
+ qA:'Look at the pictures and arrange the cards into the sentence.',qL:'Listen and choose the "after" picture.',qP:'Look at the pictures and choose the correct sentence.',before:'Before',after:'After',play:'▶ Listen',
+ done:'Level complete!',yourScore:'Score',firstTry:'Right on the first try',review:'To review',perfect:'All right on the first try!',replay:'Play again',nextLv:'Next level',
+ lb:'Leaderboard',player:'Player',total:'Total',localNote:'Local leaderboard (this device only).',unlockedMsg:'Next level unlocked!',needStar:'You need at least 1 star to unlock the next level.',pts:'pts',dict:'Dictionary',close:'Close',slow:'Slow',norm:'Normal',playW:'▶ Word by word',playS:'▶ Full sentence',vocab:'Vocabulary'}};
+
+/* ---------- 狀態 ---------- */
+const cfg0={lang:'es',zh:'tc',read:'none',name:'',speed:'slow'};
+let cfg;try{cfg=Object.assign({},cfg0,JSON.parse(localStorage.getItem('ba_cfg')||'{}'));}catch(e){cfg=Object.assign({},cfg0);}
+let prog;try{prog=JSON.parse(localStorage.getItem('ba_prog')||'{}');}catch(e){prog={};}
+const ST={screen:'start',lv:0,qs:[],qi:0,score:0,streak:0,firstOK:0,results:[],cur:null,lbRows:null,final:null,look:null,vocab:false,vocabList:[]};
+const T=()=>I[cfg.lang];
+const $=id=>document.getElementById(id);
+const saveCfg=()=>{try{localStorage.setItem('ba_cfg',JSON.stringify(cfg));}catch(e){}};
+const saveProg=()=>{try{localStorage.setItem('ba_prog',JSON.stringify(prog));}catch(e){}};
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function track(ev,p){try{if(window.gtag)gtag('event',ev,p||{});}catch(e){}}
+if(GA_ID){const s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id='+GA_ID;document.head.appendChild(s);window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments);};gtag('js',new Date());gtag('config',GA_ID);}
+
+/* ---------- 文字顯示 ---------- */
+const zhOf=t=>cfg.zh==='sc'?t.sc:t.tc;
+function tokHTML(t){const z=esc(zhOf(t));const r=cfg.read==='py'?t.py:cfg.read==='zy'?t.zy:'';return `<span class="tk" data-t="${esc(t.tc)}">`+(r?`<ruby>${z}<rt>${esc(r)}</rt></ruby>`:`<span>${z}</span>`)+`</span>`;}
+const seqHTML=a=>a.map(tokHTML).join('');
+const tcText=a=>a.map(t=>t.tc).join('')+'。';
+const trans=s=>cfg.lang==='es'?s.es:s.en;
+const RATE={slow:.55,normal:.8};
+let spId=0;
+function getVoice(){try{return speechSynthesis.getVoices().find(v=>/zh[-_]TW/i.test(v.lang));}catch(e){return null;}}
+function utter(text,rate){const u=new SpeechSynthesisUtterance(text);u.lang='zh-TW';u.rate=rate;const v=getVoice();if(v)u.voice=v;speechSynthesis.speak(u);return u;}
+function speak(text){try{if(!('speechSynthesis' in window))return;spId++;speechSynthesis.cancel();utter(text,RATE[cfg.speed]||.55);}catch(e){}}
+function speechWords(tok){const w=[];tok.forEach(t=>{if(t.tc==='了'&&w.length)w[w.length-1]+='了';else w.push(t.tc);});return w;}
+function speakWords(words){try{if(!('speechSynthesis' in window))return;const id=++spId;speechSynthesis.cancel();let i=0;const next=()=>{if(id!==spId||i>=words.length)return;const u=utter(words[i++],RATE.slow);let done=false;const go=()=>{if(done)return;done=true;setTimeout(next,420);};u.onend=go;u.onerror=go;setTimeout(go,3200);};next();}catch(e){}}
+function playL(mode){const c=ST.cur,q=ST.qs[ST.qi];if(!c.played){c.played=true;c.t0=Date.now();}if(mode==='w')speakWords(speechWords(q.s.tok));else speak(tcText(q.s.tok));}
+function speakWord(tc){speak(tc==='了'?'好了':tc);}
+const curText=()=>tcText(ST.qs[ST.qi].s.tok);
+const isUnlocked=n=>UNLOCK||n===1||(prog[n-1]||0)>=1;
+const starsStr=n=>'★'.repeat(n)+'☆'.repeat(3-n);
+
+/* ---------- 排行榜 ---------- */
+let fbDb=null;
+const loadScript=src=>new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);});
+async function fb(){if(fbDb)return fbDb;await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js');firebase.initializeApp(FIREBASE_CONFIG);fbDb=firebase.firestore();return fbDb;}
+function localLB(){try{return JSON.parse(localStorage.getItem('ba_lb')||'{}');}catch(e){return{};}}
+async function lbSave(name,lv,score){
+ const lb=localLB();const e=lb[name]||{l1:0,l2:0,l3:0};e['l'+lv]=Math.max(e['l'+lv]||0,score);lb[name]=e;try{localStorage.setItem('ba_lb',JSON.stringify(lb));}catch(x){}
+ if(FB_OK){try{const db=await fb();const ref=db.collection('baLeaderboard').doc(name.replace(/\//g,'_'));const snap=await ref.get();const d=snap.exists?snap.data():{l1:0,l2:0,l3:0};d['l'+lv]=Math.max(d['l'+lv]||0,score);d.name=name;d.total=(d.l1||0)+(d.l2||0)+(d.l3||0);d.updated=Date.now();await ref.set(d);}catch(x){console.warn(x);}}
+}
+async function lbLoad(){
+ if(FB_OK){try{const db=await fb();const s=await db.collection('baLeaderboard').orderBy('total','desc').limit(15).get();return s.docs.map(d=>d.data());}catch(x){console.warn(x);}}
+ return Object.entries(localLB()).map(([name,e])=>({name,l1:e.l1||0,l2:e.l2||0,l3:e.l3||0,total:(e.l1||0)+(e.l2||0)+(e.l3||0)})).sort((a,b)=>b.total-a.total).slice(0,15);
+}
+
+/* ---------- 流程 ---------- */
+function go(s){ST.screen=s;render();window.scrollTo(0,0);}
+function setCfg(k,v){cfg[k]=v;saveCfg();render();}
+function startGame(){const v=($('nm')?$('nm').value:'').trim();cfg.name=v||(cfg.lang==='es'?'Jugador':'Player');saveCfg();track('ba_start',{lang:cfg.lang,zh:cfg.zh});go('levels');}
+function openLevel(n){if(!isUnlocked(n))return;ST.lv=n;go('intro');}
+function variants(s){const t=s.tok;return[[t[0],t[2],t[1],...t.slice(3)],[t[0],...t.slice(2)],[t[0],t[2],t[3],t[1],...t.slice(4)]];}
+function beginLevel(){
+ const pool=shuffle(DATA.filter(d=>d.lv===ST.lv));
+ const types=shuffle(['A','A','A','A','A','L','L','L','P','P']);
+ ST.qs=pool.map((s,i)=>({s,type:types[i]}));
+ ST.qi=0;ST.score=0;ST.streak=0;ST.firstOK=0;ST.results=[];newCur();track('ba_level_start',{lv:ST.lv});go('game');
+}
+function newCur(){
+ const q=ST.qs[ST.qi],s=q.s;
+ ST.look=null;ST.vocab=false;const c={tries:0,hint:false,done:false,ok:null,pts:0,elapsed:0,t0:Date.now(),msg:'',locked:[],picked:-1};
+ if(q.type==='A'){let tray=shuffle(s.tok.map((t,i)=>Object.assign({i},t)));let n=0;while(tray.every((t,i)=>t.i===i)&&n++<10)tray=shuffle(tray);c.tray=tray;c.placed=[];}
+ else if(q.type==='L'){const others=shuffle(DATA.filter(d=>d.lv===s.lv&&d.id!==s.id)).slice(0,2);c.opts=shuffle([s,...others]).map(d=>({id:d.id,ok:d.id===s.id}));c.played=false;setTimeout(()=>{if(ST.screen==='game'&&ST.cur===c)playL('w');},350);}
+ else{const seen=new Set([tcText(s.tok)]);const wrong=[];for(const v of shuffle(variants(s))){const k=tcText(v);if(!seen.has(k)&&wrong.length<2){seen.add(k);wrong.push(v);}}c.opts=shuffle([{seq:s.tok,ok:true},...wrong.map(w=>({seq:w,ok:false}))]);}
+ ST.cur=c;
+}
+function useHint(){const c=ST.cur;if(c.done||c.hint)return;c.hint=true;render();}
+function placeTok(i){const c=ST.cur;if(c.done)return;const k=c.tray.findIndex(t=>t.i===i);if(k<0)return;c.placed.push(c.tray.splice(k,1)[0]);c.msg='';render();}
+function unplaceTok(i){const c=ST.cur;if(c.done)return;const k=c.placed.findIndex(t=>t.i===i);if(k<0)return;c.tray.push(c.placed.splice(k,1)[0]);c.msg='';render();}
+function clearTok(){const c=ST.cur;if(c.done)return;c.tray=c.tray.concat(c.placed);c.placed=[];c.msg='';render();}
+function confirmA(){
+ const c=ST.cur,q=ST.qs[ST.qi];if(c.done||c.placed.length!==q.s.tok.length)return;
+ if(c.tries===0)c.elapsed=(Date.now()-c.t0)/1000;c.tries++;
+ const ok=c.placed.every((t,i)=>t.tc===q.s.tok[i].tc);
+ if(ok)return finishQ(true);
+ if(c.tries>=2)return finishQ(false);
+ let cut=c.placed.findIndex((t,i)=>t.tc!==q.s.tok[i].tc);c.tray=c.tray.concat(c.placed.splice(cut));c.msg='retry';render();shakeFx();
+}
+function pickOpt(k){
+ const c=ST.cur;if(c.done||c.locked.includes(k))return;
+ if(c.tries===0)c.elapsed=(Date.now()-c.t0)/1000;c.tries++;c.picked=k;
+ if(c.opts[k].ok)return finishQ(true);
+ if(c.tries>=2){return finishQ(false);}
+ c.locked.push(k);c.msg='retry';render();shakeFx();
+}
+function shakeFx(){const el=document.querySelector('.fb.bad');if(el){el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');}}
+function mult(){return ST.streak>=3?1.5:ST.streak===2?1.2:1;}
+function finishQ(ok){
+ const c=ST.cur;c.done=true;c.ok=ok;let pts=0;
+ if(ok){
+  if(c.tries===1){ST.streak++;ST.firstOK++;pts=Math.round(100*mult())+Math.max(0,Math.round(50*(1-c.elapsed/10)));}
+  else{ST.streak=0;pts=50;}
+  pts=Math.max(0,pts-(c.hint?20:0));
+ }else ST.streak=0;
+ c.pts=pts;ST.score+=pts;
+ ST.results.push({q:ST.qs[ST.qi],ok,tries:c.tries,hint:c.hint,pts});
+ track('ba_answer',{lv:ST.lv,id:ST.qs[ST.qi].s.id,type:ST.qs[ST.qi].type,ok:ok,tries:c.tries});
+ speak(curText());render();
+}
+function nextQ(){ST.qi++;if(ST.qi>=ST.qs.length)return finishLevel();newCur();go('game');}
+function finishLevel(){
+ const n=ST.firstOK,stars=n>=9?3:n>=7?2:n>=5?1:0;
+ const before=prog[ST.lv]||0;prog[ST.lv]=Math.max(before,stars);saveProg();
+ ST.final={score:ST.score,stars,firstOK:n,newUnlock:stars>=1&&ST.lv<3&&(prog[ST.lv+1]===undefined)&&before<1};
+ lbSave(cfg.name,ST.lv,ST.score);track('ba_level_end',{lv:ST.lv,score:ST.score,stars});
+ go('result');
+}
+function restartLevel(){beginLevel();}
+function setRead(v){cfg.read=v;saveCfg();render();}
+function setSpeed(v){cfg.speed=v;saveCfg();render();}
+function showLook(tc){ST.look=TOKMAP[tc]||null;ST.vocab=false;render();}
+function closeLook(){ST.look=null;ST.vocab=false;render();}
+function openVocab(){
+ const q=ST.qs[ST.qi],seen=new Set(),u=[];q.s.tok.forEach(t=>{if(!seen.has(t.tc)){seen.add(t.tc);u.push(t);}});
+ let o=shuffle(u),n=0;while(u.length>1&&o.every((t,i)=>t===u[i])&&n++<10)o=shuffle(u);
+ ST.vocabList=o;ST.vocab=true;ST.look=null;render();
+}
+function vocabHTML(){
+ const t=T();
+ const rows=ST.vocabList.map(k=>{const g=GLOSS[k.tc]||['',''];const main=cfg.lang==='es'?g[0]:g[1],other=cfg.lang==='es'?g[1]:g[0];
+  return `<div class="vrow"><div class="vz">${esc(zhOf(k))}</div><div class="vm"><div class="vp">${esc(k.py)} · ${esc(k.zy)}</div><div>${esc(main)}</div><div class="vp">${esc(other)}</div></div><button class="vsp" onclick="speakWord('${k.tc}')" aria-label="${t.play}">▶</button></div>`;}).join('');
+ return `<div class="sheet" onclick="closeLook()"><div class="sheetcard" onclick="event.stopPropagation()"><div class="row" style="justify-content:space-between"><h2 style="margin:0">${t.vocab}</h2><button class="btn ghost" onclick="closeLook()">${t.close}</button></div><div class="vlist">${rows}</div></div></div>`;
+}
+function sheetHTML(){
+ if(ST.vocab)return vocabHTML();
+ const k=ST.look;if(!k)return '';const t=T(),g=GLOSS[k.tc]||['',''];
+ const main=cfg.lang==='es'?g[0]:g[1],other=cfg.lang==='es'?g[1]:g[0];
+ return `<div class="sheet" onclick="closeLook()"><div class="sheetcard" onclick="event.stopPropagation()"><div class="row" style="justify-content:space-between"><div style="font-size:30px">${esc(zhOf(k))}</div><button class="btn ghost" onclick="closeLook()">${t.close}</button></div><div class="tl" style="font-size:16px;margin:4px 0">${esc(k.py)} · ${esc(k.zy)}</div><div style="font-size:18px">${esc(main)}</div><div class="tl">${esc(other)}</div><button class="btn" onclick="speakWord('${k.tc}')">${t.play}</button></div></div>`;
+}
+async function openLB(){ST.lbRows=null;go('lb');ST.lbRows=await lbLoad();if(ST.screen==='lb')render();}
+
+/* ---------- 畫面 ---------- */
+function pairHTML(id){return `<div class="pair"><figure>${SC[id][0]}<figcaption>之前 · ${T().before}</figcaption></figure><div class="ar">→</div><figure>${SC[id][1]}<figcaption>之後 · ${T().after}</figcaption></figure></div>`;}
+function seg(k,v,label){return `<button class="seg ${cfg[k]===v?'on':''}" onclick="setCfg('${k}','${v}')">${label}</button>`;}
+function renderStart(){
+ const t=T();
+ return `<div class="card center"><h1>把它放好</h1><div class="sub">Ponlo en su lugar · ${esc(t.sub)}</div></div>
+ <div class="card"><div class="lab" style="margin-top:0">${t.name}</div><input id="nm" type="text" maxlength="16" placeholder="${esc(t.ph)}" value="${esc(cfg.name)}">
+ <div class="lab">${t.ui}</div><div class="row">${seg('lang','es','Español')}${seg('lang','en','English')}</div>
+ <div class="lab">${t.script}</div><div class="row">${seg('zh','tc','繁體')}${seg('zh','sc','简体')}</div>
+ <div class="lab">${t.read}</div><div class="row">${seg('read','py',t.py)}${seg('read','zy',t.zy)}${seg('read','none',t.off)}</div>
+ <div style="margin-top:16px"><button class="btn primary block" onclick="startGame()">${t.start}</button></div></div>`;
+}
+function renderLevels(){
+ const t=T();
+ let h=`<div class="bar"><div>${esc(cfg.name)}</div><button class="btn ghost" onclick="go('start')">⚙</button></div><h2>${t.pick}</h2>`;
+ LV.forEach((l,i)=>{const n=i+1,ok=isUnlocked(n),st=prog[n]||0;
+  h+=`<button class="lvcard" ${ok?'':'disabled'} onclick="openLevel(${n})"><div class="row" style="justify-content:space-between"><div class="t">${n} · ${cfg.zh==='sc'?l.sc:l.tc}</div><div class="stars">${starsStr(st)}</div></div><div class="d">${l[cfg.lang]}</div>${ok?'':`<div class="d">${t.locked}</div>`}</button>`;});
+ h+=`<button class="btn block" onclick="openLB()">${t.rank}</button>`;
+ return h;
+}
+function renderIntro(){
+ const t=T(),l=LV[ST.lv-1],ex=DATA.find(d=>d.id===l.ex);
+ return `<div class="bar"><button class="ic" onclick="go('levels')">←</button><div>${ST.lv} · ${cfg.zh==='sc'?l.sc:l.tc}</div><div></div></div>
+ <div class="card"><h2>${t.formula}</h2><div class="formula"><div class="f">${cfg.zh==='sc'?'谁':'誰'}<small>${t.who}</small></div><div>＋</div><div class="f ba">把</div><div>＋</div><div class="f">${cfg.zh==='sc'?'东西':'東西'}<small>${t.thing}</small></div><div>＋</div><div class="f">${cfg.zh==='sc'?'动作＋结果':'動作＋結果'}<small>${t.act}</small></div></div>
+ <div class="lab">${t.example}</div><div class="sent">${seqHTML(ex.tok)}。</div><div class="tl">${esc(trans(ex))}</div>
+ <button class="btn" onclick="speak('${tcText(ex.tok)}')">${t.play}</button></div>
+ <button class="btn primary block" onclick="beginLevel()">${t.begin}</button>`;
+}
+function topbar(){const t=T();return `<div class="bar"><button class="ic" onclick="go('levels')" aria-label="menu">☰</button><div>${ST.lv} · ${ST.qi+1}/${ST.qs.length}</div><div>${t.score} <b>${ST.score}</b></div>${ST.streak>=2?`<div class="combo">${t.combo} ${ST.streak}</div>`:''}<button class="ic" onclick="restartLevel()" aria-label="restart">↻</button></div>`;}
+function renderGame(){
+ const t=T(),q=ST.qs[ST.qi],c=ST.cur,s=q.s,last=ST.qi===ST.qs.length-1;
+ const tools=`<div class="tools"><div class="mseg">${['py','zy','none'].map(v=>`<button class="mini ${cfg.read===v?'on':''}" onclick="setRead('${v}')">${v==='py'?t.py:v==='zy'?t.zy:'—'}</button>`).join('')}</div><div class="mseg">${['slow','normal'].map(v=>`<button class="mini ${cfg.speed===v?'on':''}" onclick="setSpeed('${v}')">${v==='slow'?t.slow:t.norm}</button>`).join('')}</div></div>`;
+ let h=topbar()+`<div class="card">${tools}<div class="qlabel">${q.type==='A'?t.qA:q.type==='L'?t.qL:t.qP}</div>`;
+ if(q.type==='L'){
+  h+=`<div class="row" style="justify-content:center"><button class="btn" onclick="playL('w')">${t.playW}</button><button class="btn" onclick="playL('s')">${t.playS}</button></div><div class="opts3">`;
+  c.opts.forEach((o,k)=>{const cls=c.done?(o.ok?'ok':(c.picked===k?'bad':'')):(c.locked.includes(k)?'bad':'');h+=`<button class="opt3 ${cls}" onclick="pickOpt(${k})">${SC[o.id][1]}</button>`;});
+  h+=`</div>`;
+ }else h+=pairHTML(s.id);
+ if(q.type==='A'&&!c.done){
+  h+=`<div class="slots">${c.placed.map(x=>`<button class="chip ${x.tc==='把'?'ba':''}" onclick="unplaceTok(${x.i})">${tokHTML(x)}</button>`).join('')}</div>`;
+  h+=`<div class="tray">${c.tray.map(x=>`<button class="chip ${x.tc==='把'?'ba':''}" onclick="placeTok(${x.i})">${tokHTML(x)}</button>`).join('')}</div>`;
+  h+=`<div class="row"><button class="btn primary" onclick="confirmA()" ${c.placed.length===s.tok.length?'':'disabled'}>${t.confirm}</button><button class="btn ghost" onclick="clearTok()">${t.clear}</button></div>`;
+ }
+ if(q.type==='P'){
+  c.opts.forEach((o,k)=>{const cls=c.done?(o.ok?'ok':(c.picked===k?'bad':'')):(c.locked.includes(k)?'bad':'');h+=`<button class="optS ${cls}" onclick="pickOpt(${k})">${seqHTML(o.seq)}。</button>`;});
+ }
+ if(!c.done){
+  if(c.msg==='retry')h+=`<div class="fb bad">${t.tryAgain}</div>`;
+  if(c.hint){if(q.type==='L')h+=`<div class="sent">${seqHTML(s.tok)}。</div>`;h+=`<div class="tl">${esc(trans(s))}</div>`;}
+  const vOK=q.type!=='L'||c.hint;
+  h+=`<div class="row" style="margin-top:8px">${c.hint?'':`<button class="btn ghost" onclick="useHint()">${t.hint}</button>`}${vOK?`<button class="btn ghost" onclick="openVocab()">${t.vocab}</button>`:''}</div>`;
+ }else{
+  h+=`<div class="fb ${c.ok?'ok':'bad'}"><b>${c.ok?t.correct:t.wrong}</b> · +${c.pts} ${t.pts}${c.ok&&c.tries===1&&ST.streak>=2?' · '+t.combo+' ×'+mult():''}</div>`;
+  h+=`<div class="sent">${seqHTML(s.tok)}。</div><div class="tl">${esc(trans(s))}</div>`;
+  h+=`<div class="row"><button class="btn" onclick="speak(curText())">${t.play}</button><button class="btn primary" style="flex:1" onclick="nextQ()">${last?t.finish:t.next}</button></div>`;
+ }
+ return h+`</div>`;
+}
+function renderResult(){
+ const t=T(),f=ST.final;
+ let h=`<div class="card center"><h2>${t.done}</h2><div class="stars big">${starsStr(f.stars)}</div><div class="sub">${t.yourScore}: <b style="color:var(--ink);font-size:22px">${f.score}</b></div><div class="sub">${t.firstTry}: ${f.firstOK}/${ST.qs.length}</div>`;
+ if(f.stars>=1&&ST.lv<3&&isUnlocked(ST.lv+1))h+=`<div class="fb ok">${t.unlockedMsg}</div>`;
+ if(f.stars<1&&ST.lv<3)h+=`<div class="note">${t.needStar}</div>`;
+ h+=`</div>`;
+ const rev=ST.results.filter(r=>!(r.ok&&r.tries===1));
+ h+=`<div class="card"><h2>${t.review}</h2>`;
+ if(!rev.length)h+=`<div class="sub">${t.perfect}</div>`;
+ rev.forEach(r=>{h+=`<div class="rev">${pairHTML(r.q.s.id)}<div class="sent">${seqHTML(r.q.s.tok)}。</div><div class="tl">${esc(trans(r.q.s))}</div></div>`;});
+ h+=`</div><div class="row"><button class="btn" style="flex:1" onclick="beginLevel()">${t.replay}</button>`;
+ if(ST.lv<3&&isUnlocked(ST.lv+1))h+=`<button class="btn primary" style="flex:1" onclick="openLevel(${ST.lv+1})">${t.nextLv}</button>`;
+ h+=`</div><div class="row" style="margin-top:8px"><button class="btn" style="flex:1" onclick="go('levels')">${t.menu}</button><button class="btn" style="flex:1" onclick="openLB()">${t.rank}</button></div>`;
+ return h;
+}
+function renderLB(){
+ const t=T();
+ let h=`<div class="bar"><button class="ic" onclick="go('levels')">←</button><div>${t.lb}</div><div></div></div><div class="card">`;
+ if(ST.lbRows===null)h+=`<div class="sub">…</div>`;
+ else{h+=`<table class="lbt"><tr><th>#</th><th>${t.player}</th><th>1</th><th>2</th><th>3</th><th>${t.total}</th></tr>`;
+  ST.lbRows.forEach((r,i)=>{h+=`<tr><td>${i+1}</td><td>${esc(r.name)}</td><td>${r.l1||0}</td><td>${r.l2||0}</td><td>${r.l3||0}</td><td><b>${r.total||0}</b></td></tr>`;});
+  h+=`</table>`;}
+ if(!FB_OK)h+=`<div class="note">${t.localNote}</div>`;
+ return h+`</div>`;
+}
+function render(){
+ const m={start:renderStart,levels:renderLevels,intro:renderIntro,game:renderGame,result:renderResult,lb:renderLB};
+ const el=$('app');if(!el)return;
+ const nm=$('nm');if(nm)cfg.name=nm.value;
+ el.className='';
+ el.innerHTML=m[ST.screen]()+sheetHTML();
+}
+document.addEventListener('click',e=>{const tk=e.target.closest&&e.target.closest('.tk');if(!tk)return;if(!tk.closest('.sent'))return;e.stopPropagation();e.preventDefault();showLook(tk.dataset.t);},true);
+document.addEventListener('DOMContentLoaded',render);
+if(document.readyState!=='loading')render();
+</script>
+</body>
+</html>
