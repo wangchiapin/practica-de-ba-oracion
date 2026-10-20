@@ -37,12 +37,13 @@ No hay vidas: el nivel termina tras 10 preguntas.
 Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **repaso de errores** y un **ranking** (mejor puntaje por jugador, top 15).
 
 ### Idiomas y lectura
-- Interfaz en **Español / English**
-- Variante del español: **Latinoamérica / España** (carro/coche, celular/móvil, tarea/deberes, pastel/tarta, piso/suelo…)
+- Interfaz en **Español / English / solo chino** (en "solo chino" no se ve ningún texto en español ni en inglés: sin traducciones ni significados; el botón "Pista" solo se ofrece en las preguntas de escuchar, donde muestra la oración escrita)
+- Variante del español: **Latinoamérica / España** (carro/coche, celular/móvil, tarea/deberes, pastel/tarta, piso/suelo…). Solo aparece cuando la interfaz está en español.
 - Caracteres **繁體 / 简体**
-- Lectura en **pinyin / zhuyin (注音) / sin lectura**, con **pronunciación de Taiwán** (según el Diccionario del Ministerio de Educación; con cambio de tono de 一/不)
-- Voz en `zh-TW`, con velocidad **lenta** (por defecto) o normal
-- Botón **Vocabulario** en cada pregunta con significado, pinyin/zhuyin y audio de cada palabra
+- Lectura en **pinyin / zhuyin (注音) / ambos / sin lectura** (por defecto: pinyin), con **pronunciación de Taiwán** (según el Diccionario del Ministerio de Educación; con cambio de tono de 一/不)
+- Voz en `zh-TW`, con tres velocidades: **lenta** (0.45), **normal** (0.65, por defecto) y **rápida** (0.85). En "escuchar y elegir", la oración se lee palabra por palabra a la velocidad elegida (la pausa entre palabras se ajusta a la velocidad).
+- **Ajustes compartidos con los otros juegos:** caracteres, idioma, lectura y velocidad se guardan en `localStorage` bajo la clave `hanziGames.settings`, con la forma `{"v":1,"script":"trad|simp","lang":"es|en|zh","phon":"pinyin|zhuyin|both|off","rate":"slow|normal|fast"}`. Se comparten entre los juegos del mismo dominio y se sincronizan entre pestañas; los campos desconocidos que escriban otros juegos se conservan. Los ajustes antiguos de este juego (`ba_cfg`) se migran la primera vez. Nombre, variante del español, progreso y ranking siguen guardándose solo en este juego.
+- Botón **Vocabulario** en cada pregunta con significado, pinyin/zhuyin y audio de cada palabra (en "solo chino": palabra, lectura y audio)
 
 ### Para profesores
 - Es un solo archivo: `index.html`. Funciona en GitHub Pages sin compilar nada.
@@ -72,12 +73,13 @@ Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **
 - 結算有**錯題複習**，另有**排行榜**（每人只留最高分，前 15 名）
 
 ### 語言與讀音
-- 介面：Español / English
-- 西班牙文版本：拉丁美洲／西班牙（用詞不同，例如 carro／coche、celular／móvil、piso／suelo）
+- 介面：Español／English／只有中文（「只有中文」不會出現任何西文或英文，沒有翻譯和詞義；「提示」只在聽音題提供，顯示整句文字）
+- 西班牙文版本：拉丁美洲／西班牙（用詞不同，例如 carro／coche、celular／móvil、piso／suelo），只在介面為西文時顯示
 - 字體：繁體／简体
-- 讀音：拼音／注音／不顯示，**以台灣讀音為主**（依教育部《國語辭典》，含一、不變調）
-- 語音使用 `zh-TW`，預設慢速，聽音題逐詞念
-- 每題都有「詞彙」按鈕，可查每個詞的拼音、注音、西文與英文意思，並聽發音
+- 讀音：拼音／注音／兩個都顯示／不顯示（預設拼音），**以台灣讀音為主**（依教育部《國語辭典》，含一、不變調）
+- 語音使用 `zh-TW`，三種語速：慢 0.45、中 0.65（預設）、快 0.85；聽音題逐詞念，用你選的語速，詞與詞之間的停頓會跟著語速調整
+- **和其他遊戲共用設定**：字體、介面語言、讀音、語速存在 `localStorage` 的 `hanziGames.settings`，格式 `{"v":1,"script":"trad|simp","lang":"es|en|zh","phon":"pinyin|zhuyin|both|off","rate":"slow|normal|fast"}`；同網域的遊戲互通、分頁之間即時同步，其他遊戲多存的欄位會保留。舊版的 `ba_cfg` 設定第一次開啟時會自動搬過來。名字、西文變體、進度和排行榜仍只存在這個遊戲。
+- 每題都有「詞彙」按鈕，可查每個詞的拼音、注音、意思（西文／英文），並聽發音；「只有中文」時只顯示詞、讀音和發音
 
 ### 老師設定
 - 單一檔案 `index.html`，放在 GitHub Pages 即可使用
