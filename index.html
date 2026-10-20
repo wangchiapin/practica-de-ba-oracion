@@ -89,7 +89,7 @@ rt{font-size:.5em;color:var(--sub);font-weight:400;letter-spacing:0}
 <body>
 <div id="app"></div>
 <script>
-const FIREBASE_CONFIG={apiKey:'YOUR_API_KEY',authDomain:'YOUR_PROJECT_ID.firebaseapp.com',projectId:'YOUR_PROJECT_ID',appId:'YOUR_APP_ID'};
+const FIREBASE_CONFIG={apiKey:'AIzaSyC_YSDn2OH6_GKKwCq0d8QFNl3fYXzTC60',authDomain:'memorma-24dab.firebaseapp.com',projectId:'memorma-24dab',storageBucket:'memorma-24dab.firebasestorage.app',messagingSenderId:'806709458465',appId:'1:806709458465:web:f0d12acb2f911f2f165560'};
 const GA_ID='';
 const FB_OK=!/^YOUR/.test(FIREBASE_CONFIG.apiKey);
 const UNLOCK=/[?&]unlock=1/.test(location.search);
@@ -350,11 +350,22 @@ const starsStr=n=>'★'.repeat(n)+'☆'.repeat(3-n);
 /* ---------- 排行榜 ---------- */
 let fbDb=null;
 const loadScript=src=>new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);});
-async function fb(){if(fbDb)return fbDb;await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js');firebase.initializeApp(FIREBASE_CONFIG);fbDb=firebase.firestore();return fbDb;}
+async function fb(){if(fbDb)return fbDb;await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js');await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js');firebase.initializeApp(FIREBASE_CONFIG);fbDb=firebase.firestore();return fbDb;}
 function localLB(){try{return JSON.parse(localStorage.getItem('ba_lb')||'{}');}catch(e){return{};}}
 async function lbSave(name,lv,score){
  const lb=localLB();const e=lb[name]||{l1:0,l2:0,l3:0};e['l'+lv]=Math.max(e['l'+lv]||0,score);lb[name]=e;try{localStorage.setItem('ba_lb',JSON.stringify(lb));}catch(x){}
- if(FB_OK){try{const db=await fb();const ref=db.collection('baLeaderboard').doc(name.replace(/\//g,'_'));const snap=await ref.get();const d=snap.exists?snap.data():{l1:0,l2:0,l3:0};d['l'+lv]=Math.max(d['l'+lv]||0,score);d.name=name;d.total=(d.l1||0)+(d.l2||0)+(d.l3||0);d.updated=Date.now();await ref.set(d);}catch(x){console.warn(x);}}
+ if(FB_OK){try{
+  const db=await fb();
+  const uid=(await firebase.auth().signInAnonymously()).user.uid;   /* 匿名登入：每台裝置一筆 */
+  const ref=db.collection('baLeaderboard').doc(uid);
+  const snap=await ref.get();
+  const o=snap.exists?snap.data():{l1:0,l2:0,l3:0};
+  const d={name:String(name).slice(0,14),l1:o.l1||0,l2:o.l2||0,l3:o.l3||0};
+  d['l'+lv]=Math.max(d['l'+lv],Math.max(0,Math.min(5000,Math.round(score))));
+  d.total=d.l1+d.l2+d.l3;
+  d.updatedAt=firebase.firestore.FieldValue.serverTimestamp();
+  await ref.set(d);
+ }catch(x){console.warn(x);}}
 }
 async function lbLoad(){
  if(FB_OK){try{const db=await fb();const s=await db.collection('baLeaderboard').orderBy('total','desc').limit(15).get();return s.docs.map(d=>d.data());}catch(x){console.warn(x);}}
