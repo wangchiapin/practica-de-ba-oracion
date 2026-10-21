@@ -48,7 +48,7 @@ Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **
 ### Para profesores
 - Es un solo archivo: `index.html`. Funciona en GitHub Pages sin compilar nada.
 - Para modo de prueba con todos los niveles abiertos: añade `?unlock=1` a la URL.
-- **Ranking compartido (Firebase Firestore):** en `index.html` reemplaza `FIREBASE_CONFIG` por la configuración de tu proyecto. Los puntajes se guardan en la colección `baLeaderboard`. Sin configurar, el ranking solo se guarda en el dispositivo.
+- **Ranking compartido (Firebase Firestore):** ya está conectado al proyecto `memorma-24dab` (compartido con Memorama y Ordena el Armario), con inicio de sesión anónimo; los puntajes se guardan en la colección `baLeaderboard` (mejor puntaje de cada uno de los tres niveles, suma total, 10 mejores). La configuración está en `FIREBASE_CONFIG` de `index.html`; si no se puede conectar, el ranking solo se guarda en el dispositivo. Desde 2026-10-21 también se registran visitas, inicios y partidas terminadas (`visits` y `plays` del mismo proyecto; GA no cambia).
 - **GA4 (opcional):** escribe tu ID en `GA_ID`. Eventos: `ba_start`, `ba_level_start`, `ba_answer`, `ba_level_end`.
 - Para agregar o editar oraciones, modifica el arreglo `RAW` (palabras con caracteres tradicionales, simplificados, pinyin y zhuyin), el diccionario `GLOSS` (significados) y el dibujo correspondiente en `SC`.
 
@@ -84,7 +84,8 @@ Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **
 ### 老師設定
 - 單一檔案 `index.html`，放在 GitHub Pages 即可使用
 - 測試時在網址後面加 `?unlock=1` 可解鎖全部關卡
-- 排行榜要共用，請把 `FIREBASE_CONFIG` 換成自己的 Firebase 設定（集合名稱：`baLeaderboard`）；沒設定時只存在該裝置
+- 排行榜已接到 Firebase 專案 `memorma-24dab`（與翻牌記憶、收納小達人共用，匿名登入，集合 `baLeaderboard`，前 10 名）；設定在 `index.html` 的 `FIREBASE_CONFIG`，連不上時只存在該裝置
+- 2026-10-21 起也記錄訪客、開始、玩完（同專案的 `visits`、`plays`，GA 不動）
 - 可選擇填入 `GA_ID` 啟用 GA4
 
 ---
