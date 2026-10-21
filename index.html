@@ -735,7 +735,7 @@ function buildScene(id){const sp=SPEC[id];if(!sp)throw new Error('no scene '+id)
  if(!f)throw new Error('scene type '+sp[0]);return f(...sp.slice(1));}
 function scene(id){return SC[id]||(SC[id]=buildScene(id));}
 const keysOf=id=>KEYS[id]||[];
-function pickOthers(s){const ks=keysOf(s.id);const all=shuffle(DATA.filter(d=>d.lv===s.lv&&d.id!==s.id));const ok=all.filter(d=>!keysOf(d.id).some(k=>ks.includes(k)));return (ok.length>=2?ok:all).slice(0,2);}
+function pickOthers(s){const ks=keysOf(s.id);const all=shuffle(DATA.filter(d=>d.lv===s.lv&&d.id!==s.id));const same=all.filter(d=>{const k=keysOf(d.id);return k[0]===ks[0]&&k[1]!==ks[1];});const ok=all.filter(d=>!keysOf(d.id).some(k=>ks.includes(k)));const out=[];if(same.length)out.push(same[0]);for(const d of (ok.length>=2?ok:all)){if(out.length>=2)break;if(!out.includes(d))out.push(d);}return out;}
 const LV=[{tc:'放置類',sc:'放置类',es:'Colocar cosas',en:'Placing things',ex:1},{tc:'結果類',sc:'结果类',es:'Resultados',en:'Results',ex:11},{tc:'處置類',sc:'处置类',es:'Dar y transformar',en:'Giving & changing',ex:21}];
 const I={es:{
  sub:'Practica la oración con 把',name:'Tu nombre',ph:'Escribe tu nombre',ui:'Idioma',script:'Caracteres',read:'Lectura',py:'Pinyin',zy:'Zhuyin',off:'Sin lectura',start:'Empezar',pick:'Elige un nivel',locked:'Bloqueado: consigue 1 estrella en el nivel anterior',rank:'Ranking',menu:'Menú',
