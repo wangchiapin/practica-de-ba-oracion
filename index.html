@@ -121,10 +121,10 @@ rt{font-size:.5em;color:var(--sub);font-weight:400;letter-spacing:0}
  h1{font-size:34px}
  .lvgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
  .lvgrid .lvcard{margin-bottom:0;padding:22px}
- .qcard{min-height:830px;padding:22px 26px}
- .qgrid.A .pics,.qgrid.P .pics{min-height:0;max-width:720px;width:100%;margin:6px auto 10px}
+ .qcard{min-height:clamp(640px,calc(100vh - 200px),830px);padding:22px 26px}
+ .qgrid.A .pics,.qgrid.P .pics{min-height:0;max-width:clamp(400px,calc(100vh - 400px),720px);width:100%;margin:6px auto 10px}
  .qgrid.A .qact,.qgrid.P .qact{max-width:720px;width:100%;margin:0 auto}
- .qgrid.P .optS{min-height:64px}
+ .qgrid.P .optS{min-height:54px;padding-top:6px;padding-bottom:6px}
  .qgrid.A .qact,.qgrid.P .qact{min-height:0}
  .qgrid.L{display:flex}
  .qgrid.L .pics.L{flex:1;justify-content:center}
