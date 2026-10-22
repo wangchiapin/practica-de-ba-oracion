@@ -1,4 +1,4 @@
-# 把它放好 · Ponlo en su lugar
+# 把 · Oración con 把
 ### Práctica de la oración con 把 (把字句) para hispanohablantes · 給西語學習者的把字句練習遊戲
 
 🎮 **Jugar / 開始玩:** https://wangchiapin.github.io/practica-de-ba-oracion/
@@ -7,12 +7,13 @@
 
 ## 🇪🇸 Español
 
-**Ponlo en su lugar** es un juego web para practicar la estructura **把** del chino mandarín. En cada pregunta ves dos imágenes, **antes** y **después**, y debes formar o reconocer la oración correcta.
+**把 (Oración con 把)** es un juego web para practicar la estructura **把** del chino mandarín. En cada pregunta ves dos imágenes, **antes** y **después**, y debes formar o reconocer la oración correcta.
 
 > 誰 + **把** + 東西 + 動作 + 結果  
 > Ejemplo: 我**把**書放在桌子上。 (Puse el libro sobre la mesa.)
 
 ### Cómo se juega
+- En la **pantalla de inicio** (todo en una sola página) escribes tu **apodo** (obligatorio), eliges el nivel y juegas. Los textos de la interfaz se ven en dos líneas: chino grande y español/inglés pequeño.
 - **371 oraciones en 3 niveles** (cada partida elige 10 al azar):
   1. **關卡 1 · Nivel 1** – poner algo en un lugar: 把書放在桌子上
   2. **關卡 2 · Nivel 2** – cómo queda algo: 他把杯子打破了
@@ -20,7 +21,7 @@
 - Cada nivel mezcla **3 tipos de pregunta**:
   - **Ordenar tarjetas**: mira las imágenes y ordena las palabras.
   - **Escuchar y elegir**: oye la oración (palabra por palabra) y elige la imagen de "después".
-  - **Elegir la oración correcta**: una frase correcta y dos incorrectas (solo se usan errores que de verdad no se pueden decir, por ejemplo 把 mal colocado o sin el complemento final; nunca una frase natural sin 把).
+  - **Elegir la oración correcta** (al acertar, las opciones desaparecen y queda solo la oración, igual que en los otros dos tipos): una frase correcta y dos incorrectas (solo se usan errores que de verdad no se pueden decir, por ejemplo 把 mal colocado o sin el complemento final; nunca una frase natural sin 把).
 - Todas las imágenes están dibujadas con código (SVG), con un estilo sencillo y limpio.
 
 ### Puntos
@@ -34,7 +35,7 @@
 
 No hay vidas: el nivel termina tras 10 preguntas.
 **Estrellas** según las respuestas correctas a la primera: 5+ → ★, 7+ → ★★, 9+ → ★★★.
-Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **repaso de errores** y un **ranking** (mejor puntaje por jugador, top 10).
+Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **repaso de errores** (un botón que se abre solo si lo necesitas, para que no empuje el resto de la pantalla) y un **ranking** (mejor puntaje por jugador, top 10).
 
 ### Idiomas y lectura
 - Interfaz en **Español / English / solo chino** (en "solo chino" no se ve ningún texto en español ni en inglés: sin traducciones ni significados; el botón "Pista" solo se ofrece en las preguntas de escuchar, donde muestra la oración escrita)
@@ -57,13 +58,14 @@ Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **
 
 ## 🇹🇼 繁體中文
 
-**把它放好** 是一個練習「把字句」的網頁小遊戲。每題會看到「之前」和「之後」兩張圖，學生要排出或認出正確的句子。
+**把** 是一個練習「把字句」的網頁小遊戲。每題會看到「之前」和「之後」兩張圖，學生要排出或認出正確的句子。
 
 > 誰 ＋ **把** ＋ 東西 ＋ 動作 ＋ 結果
 
 ### 玩法
+- **首頁只有一頁**：輸入暱稱（必填）、選關卡、開始玩；介面文字分兩行，上面中文大字、下面西文／英文小字
 - 共 **371 句、3 關**（第 1 關 129、第 2 關 127、第 3 關 115）（每次遊玩隨機抽 10 題）：關卡 1 是把東西放到某個地方、關卡 2 是東西變成什麼樣子、關卡 3 是給人、送去或處理掉
-- 每關混合三種題型：**排字卡**、**聽音選圖**、**選出正確的句子**（錯誤選項只用真正不通順的句子，不會拿掉「把」變成另一種自然說法）
+- 每關混合三種題型：**排字卡**、**聽音選圖**、**選出正確的句子**（答對後選項會收起來，只留下句子，三種題型的答對畫面一致；錯誤選項只用真正不通順的句子，不會拿掉「把」變成另一種自然說法）
 - 圖片全部用程式碼繪製，風格簡單乾淨
 
 ### 計分與結束
@@ -71,7 +73,7 @@ Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **
 - 10 秒內答對最多再加 50 分；第二次才答對得 50 分
 - 看「提示」（整句翻譯）扣 20 分；查「詞彙」不扣分
 - 不扣命，每關 10 題結束；依第一次就答對的題數給 1～3 顆星，至少 1 顆星才能解鎖下一關
-- 結算有**錯題複習**，另有**排行榜**（每人只留最高分，前 10 名）
+- 結算有**錯題複習**（收成一個按鈕，要看再點開，錯很多題時不會把下面的按鈕推到很底下），另有**排行榜**（每人只留最高分，前 10 名）
 
 ### 語言與讀音
 - 介面：Español／English／只有中文（「只有中文」不會出現任何西文或英文，沒有翻譯和詞義；「提示」只在聽音題提供，顯示整句文字）
