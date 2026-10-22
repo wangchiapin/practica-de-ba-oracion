@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>把它放好 · Ponlo en su lugar</title>
+<title>把 · oración con 把</title>
 <style>
 :root{--bg:#efebe3;--card:#fffefb;--ink:#2a2926;--sub:#66625a;--line:#c9c0ae;--ok:#4f7a5a;--okbg:#e3eedf;--bad:#b8654f;--badbg:#f6e3dc;--acc:#ddd3be}
 *{box-sizing:border-box}
@@ -42,6 +42,23 @@ input[type=text]{width:100%;padding:11px 12px;border:1px solid var(--line);borde
 .revbtn .revn{min-width:26px;height:26px;border-radius:13px;background:var(--acc);display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:500}
 .revbtn .revc{color:var(--sub);font-size:14px}
 .revcard{margin-top:8px}
+
+.ttl{text-align:center}
+.ttl h1{margin:0;font-size:56px;line-height:1.05;font-weight:500}
+.ttl .n2{font-size:15px;color:var(--ink);margin-top:2px;letter-spacing:.02em}
+.ttl .sub{margin-top:6px}
+/* 首頁：照片拼貼＋票券關卡 */
+.hb .strip{display:flex;justify-content:center;padding:8px 6px 4px}
+.hb .tile{width:34%;max-width:200px;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:5px;transform:rotate(var(--r));margin-left:-5%}
+.hb .tile:first-child{margin-left:0}
+.hb .tile svg{width:100%;height:auto;display:block;border-radius:3px}
+.hb .ttl{margin:14px 0 12px}
+@media (max-height:940px){.hb .strip{padding:0 6px}.hb .tile{width:30%}.ttl h1{font-size:46px}.hb .ttl{margin:8px 0}.ticket{padding-top:7px;padding-bottom:7px}.ticket .th{width:84px}}
+.tickets{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.ticket{display:flex;align-items:center;gap:12px;text-align:left;padding:10px 14px 10px 10px;background:var(--card);border:1px solid var(--line);border-radius:12px;cursor:pointer;color:var(--ink);font-size:16px;border-left:6px solid var(--acc)}
+.ticket .th{width:96px;flex:none}
+.ticket .th svg{width:100%;height:auto;display:block;border-radius:6px;border:1px solid var(--line)}
+.ticket .tm{flex:1}.ticket .t{font-size:19px;font-weight:500}.ticket .d{font-size:13px;color:var(--sub)}
 .home{max-width:720px;margin:0 auto}
 .home h2.pick{font-size:16px;margin:18px 0 10px;font-weight:500}
 .home .lvcard{margin-bottom:10px}
@@ -1074,16 +1091,19 @@ async function openLB(){ST.lbRows=null;go('lb');ST.lbRows=await lbLoad();if(ST.s
 /* ---------- 畫面 ---------- */
 function pairHTML(id){return `<div class="pair"><figure>${scene(id)[0]}<figcaption>${T().before}</figcaption></figure><div class="ar">→</div><figure>${scene(id)[1]}<figcaption>${T().after}</figcaption></figure></div>`;}
 function seg(k,v,label){return `<button class="seg ${cfg[k]===v?'on':''}" onclick="setCfg('${k}','${v}')">${label}</button>`;}
+const NAME2=()=>cfg.lang==='zh'?'':(cfg.lang==='en'?'Sentence with 把':'oración con 把');
+const HOME_IDS=[1,31,226,92,301];
+const thumb=(id,k)=>scene(id)[k];
+function titleHTML(cls){const t=T(),n2=NAME2();return `<div class="ttl ${cls||''}"><h1>把</h1>${n2?`<div class="n2">${n2}</div>`:''}<div class="sub">${t.sub}</div></div>`;}
+function nameHTML(){const t=T();return `<div class="card"><div class="lab" style="margin-top:0">${t.name}</div><input id="nm" type="text" maxlength="16" placeholder="${esc(Tp().ph)}" value="${esc(cfg.name)}" oninput="this.classList.remove('err');$('nerr').textContent=''"><div class="nerr" id="nerr"></div></div>`;}
+function gearBar(){return `<div class="bar"><div></div><button class="ic" onclick="openSet()" aria-label="${esc(Tp().settings)}">⚙</button></div>`;}
+function lvName(l){return cfg.zh==='sc'?l.sc:l.tc;}
 function renderStart(){
- const t=T();
- let h=`<div class="home"><div class="bar"><div></div><button class="ic" onclick="openSet()" aria-label="${esc(Tp().settings)}">⚙</button></div>
- <div class="card center"><h1>把它放好</h1><div class="sub">${t.sub}</div>${isZH()?'':'<div class="sub" style="font-size:12px;margin-top:2px">Ponlo en su lugar</div>'}</div>
- <div class="card"><div class="lab" style="margin-top:0">${t.name}</div><input id="nm" type="text" maxlength="16" placeholder="${esc(Tp().ph)}" value="${esc(cfg.name)}" oninput="this.classList.remove('err');$('nerr').textContent=''"><div class="nerr" id="nerr"></div>
- <h2 class="pick">${t.pick}</h2><div class="lvgrid">`;
- LV.forEach((l,i)=>{const n=i+1,st=prog[n]||0;
-  h+=`<button class="lvcard" onclick="openLevel(${n})"><div class="row" style="justify-content:space-between"><div class="t">${cfg.zh==='sc'?l.sc:l.tc}</div><div class="stars">${starsStr(st)}</div></div>${isZH()?'':`<div class="d">${l[cfg.lang]}</div>`}</button>`;});
- h+=`</div></div><button class="btn block" onclick="openLB()">${t.rank}</button></div>`;
- return h;
+ const t=T(),ids=[1,31,226],tl=[-4,2,-2,3];
+ let tiles='';[1,92,226,301].forEach((id,i)=>{tiles+=`<div class="tile" style="--r:${tl[i]}deg">${thumb(id,1)}</div>`;});
+ let h=`<div class="home hb">${gearBar()}<div class="strip">${tiles}</div>${titleHTML('b')}${nameHTML()}<h2 class="pick">${t.pick}</h2><div class="tickets">`;
+ LV.forEach((l,i)=>{const n=i+1,st=prog[n]||0;h+=`<button class="ticket" onclick="openLevel(${n})"><div class="th">${thumb(ids[i],1)}</div><div class="tm"><div class="t">${lvName(l)}</div>${isZH()?'':`<div class="d">${l[cfg.lang]}</div>`}</div><div class="stars">${starsStr(st)}</div></button>`;});
+ return h+`</div><button class="btn block" onclick="openLB()">${t.rank}</button></div>`;
 }
 const sm=x=>isZH()?'':`<small>${x}</small>`;
 function renderIntro(){
@@ -1155,7 +1175,7 @@ function render(){
  const m={start:renderStart,levels:renderStart,intro:renderIntro,game:renderGame,result:renderResult,lb:renderLB};
  const el=$('app');if(!el)return;
  const nm=$('nm');if(nm&&ST.screen==='start')cfg.name=nm.value;
- el.className='';document.title=isZH()?'把它放好':'把它放好 · Ponlo en su lugar';
+ el.className='';document.title=isZH()?'把':'把 · '+NAME2();
  el.innerHTML=m[ST.screen]()+sheetHTML();
 }
 document.addEventListener('click',e=>{const tk=e.target.closest&&e.target.closest('.tk');if(!tk)return;if(!tk.closest('.sent'))return;e.stopPropagation();e.preventDefault();showLook(tk.dataset.t);},true);
