@@ -14,7 +14,7 @@
 
 ### Cómo se juega
 - En la **pantalla de inicio** (todo en una sola página) escribes tu **apodo** (obligatorio), eliges el nivel y juegas. Los textos de la interfaz se ven en dos líneas: chino grande y español/inglés pequeño.
-- **371 oraciones en 3 niveles** (cada partida elige 10 al azar):
+- **3 niveles** con un banco de oraciones que sigue creciendo (cada partida elige 10 al azar):
   1. **關卡 1 · Nivel 1** – poner algo en un lugar: 把書放在桌子上
   2. **關卡 2 · Nivel 2** – cómo queda algo: 他把杯子打破了
   3. **關卡 3 · Nivel 3** – dar, llevar o deshacerse de algo: 我把禮物送給朋友
@@ -64,7 +64,7 @@ Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **
 
 ### 玩法
 - **首頁只有一頁**：輸入暱稱（必填）、選關卡、開始玩；介面文字分兩行，上面中文大字、下面西文／英文小字
-- 共 **371 句、3 關**（第 1 關 129、第 2 關 127、第 3 關 115）（每次遊玩隨機抽 10 題）：關卡 1 是把東西放到某個地方、關卡 2 是東西變成什麼樣子、關卡 3 是給人、送去或處理掉
+- 共 **3 關**，題庫會持續增加（每次遊玩隨機抽 10 題）：關卡 1 是把東西放到某個地方、關卡 2 是東西變成什麼樣子、關卡 3 是給人、送去或處理掉
 - 每關混合三種題型：**排字卡**、**聽音選圖**、**選出正確的句子**（答對後選項會收起來，只留下句子，三種題型的答對畫面一致；錯誤選項只用真正不通順的句子，不會拿掉「把」變成另一種自然說法）
 - 圖片全部用程式碼繪製，風格簡單乾淨
 
