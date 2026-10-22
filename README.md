@@ -49,7 +49,7 @@ Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **
 
 ### Para profesores
 - Es un solo archivo: `index.html`. Funciona en GitHub Pages sin compilar nada.
-- Para modo de prueba con todos los niveles abiertos: añade `?unlock=1` a la URL.
+- Los tres niveles están abiertos desde el principio (no hay desbloqueo).
 - **Ranking compartido (Firebase Firestore):** ya está conectado al proyecto `memorma-24dab` (compartido con Memorama y Ordena el Armario), con inicio de sesión anónimo; los puntajes se guardan en la colección `baLeaderboard` (mejor puntaje de cada uno de los tres niveles, suma total, 10 mejores). La configuración está en `FIREBASE_CONFIG` de `index.html`; si no se puede conectar, el ranking solo se guarda en el dispositivo. Desde 2026-10-21 también se registran visitas, inicios y partidas terminadas (`visits` y `plays` del mismo proyecto; GA no cambia).
 - **GA4 (opcional):** escribe tu ID en `GA_ID`. Eventos: `ba_start`, `ba_level_start`, `ba_answer`, `ba_level_end`.
 - Para agregar o editar oraciones, modifica el arreglo `RAW` (palabras con caracteres tradicionales, simplificados, pinyin y zhuyin), el diccionario `GLOSS` (significados) y el dibujo correspondiente en `SC`.
@@ -72,12 +72,12 @@ Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **
 - 第一次答對 100 分，連續答對有加成（×1.2、×1.5）
 - 10 秒內答對最多再加 50 分；第二次才答對得 50 分
 - 看「提示」（整句翻譯）扣 20 分；查「詞彙」不扣分
-- 不扣命，每關 10 題結束；依第一次就答對的題數給 1～3 顆星，至少 1 顆星才能解鎖下一關
+- 不扣命，每關 10 題結束；依第一次就答對的題數給 1～3 顆星
 - 結算有**錯題複習**（收成一個按鈕，要看再點開，錯很多題時不會把下面的按鈕推到很底下），另有**排行榜**（每人只留最高分，前 10 名）
 
 ### 語言與讀音
 - 介面：Español／English／只有中文（「只有中文」不會出現任何西文或英文，沒有翻譯和詞義；「提示」只在聽音題提供，顯示整句文字）
-- 西班牙文版本：拉丁美洲／西班牙（用詞不同，例如 carro／coche、celular／móvil、piso／suelo），只在介面為西文時顯示
+- 西班牙文統一使用拉丁美洲用法
 - 字體：繁體／简体
 - 讀音：拼音／注音／兩個都顯示／不顯示（預設拼音），**以台灣讀音為主**（依教育部《國語辭典》，含一、不變調）
 - 設定都在右上角 ⚙；遊戲中有暫停、重新開始、選單（重新開始和回選單會先確認；暫停會停止計時）
@@ -88,7 +88,7 @@ Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **
 
 ### 老師設定
 - 單一檔案 `index.html`，放在 GitHub Pages 即可使用
-- 測試時在網址後面加 `?unlock=1` 可解鎖全部關卡
+- 三個關卡一開始就全部開放（沒有解鎖機制）
 - 排行榜已接到 Firebase 專案 `memorma-24dab`（與翻牌記憶、收納小達人共用，匿名登入，集合 `baLeaderboard`，前 10 名）；設定在 `index.html` 的 `FIREBASE_CONFIG`，連不上時只存在該裝置
 - 2026-10-21 起也記錄訪客、開始、玩完（同專案的 `visits`、`plays`，GA 不動）
 - 可選擇填入 `GA_ID` 啟用 GA4
