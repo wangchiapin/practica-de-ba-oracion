@@ -20,6 +20,10 @@ input[type=text]{width:100%;padding:11px 12px;border:1px solid var(--line);borde
 .seg{flex:1;min-width:80px;padding:10px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font-size:15px;cursor:pointer}
 .row:has(>.seg){align-items:stretch}
 .seg{display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.25}
+.r4 .seg{flex:1 1 40%}
+.dl{display:flex;flex-direction:column;align-items:center;line-height:1.2}
+.dl .s{font-size:.72em;opacity:.7;font-weight:400}
+.lab .dl{align-items:flex-start;flex-direction:row;gap:6px;align-items:baseline}
 .seg.on{background:var(--acc);border-color:#cfc6b2;font-weight:500}
 .btn{padding:11px 18px;border:1px solid #cfc6b2;border-radius:8px;background:#fff;color:var(--ink);font-size:16px;cursor:pointer}
 .btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
@@ -117,20 +121,20 @@ rt{font-size:.5em;color:var(--sub);font-weight:400;letter-spacing:0}
  h1{font-size:34px}
  .lvgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
  .lvgrid .lvcard{margin-bottom:0;padding:22px}
- .qcard{min-height:560px;padding:22px 26px}
+ .qcard{min-height:830px;padding:22px 26px}
  .qgrid.A .pics,.qgrid.P .pics{min-height:0;max-width:720px;width:100%;margin:6px auto 10px}
  .qgrid.A .qact,.qgrid.P .qact{max-width:720px;width:100%;margin:0 auto}
  .qgrid.P .optS{min-height:64px}
  .qgrid.A .qact,.qgrid.P .qact{min-height:0}
- .qgrid.L{display:block}
+ .qgrid.L{display:flex}
+ .qgrid.L .pics.L{flex:1;justify-content:center}
  .qgrid.L .opts3{grid-template-columns:repeat(3,1fr);width:100%;gap:16px;margin:14px 0}
  .qgrid.L .pics .row .btn{flex:none;min-width:200px}
  .chip{font-size:22px}
- .slots{min-height:150px}
+ .slots{min-height:110px}
  .sent{font-size:26px}
  .optS{font-size:22px;min-height:84px}
- .qact{min-height:420px}
- .qcard:has(.qgrid.L){min-height:470px}
+ .qact{min-height:0}
  .qgrid.L .qact{min-height:0}
  .sheet{align-items:center}
  .sheetcard{max-width:560px;border-radius:14px;padding:22px 24px}
@@ -1013,13 +1017,15 @@ function vocabHTML(){
  return `<div class="sheet" onclick="closeLook()"><div class="sheetcard" onclick="event.stopPropagation()"><div class="row" style="justify-content:space-between"><h2 style="margin:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H19v15H5.5A1.5 1.5 0 0 0 4 20.5z"/><path d="M4 20.5V5.5"/><path d="M8.5 8.5h6M8.5 12h4"/></svg>${t.vocab}</h2><button class="btn ghost" onclick="closeLook()">${t.close}</button></div><div class="vlist">${rows}</div></div></div>`;
 }
 function setHTML(){
- const t=T();
- return `<div class="sheet" onclick="closeSet()"><div class="sheetcard" onclick="event.stopPropagation()"><h2 style="margin:0 0 4px">${t.settings}</h2>
- <div class="lab">${t.script}</div><div class="row">${seg('zh','tc','繁體')}${seg('zh','sc','简体')}</div>
- <div class="lab">${t.ui}</div><div class="row">${seg('lang','es','中文＋Español')}${seg('lang','en','中文＋English')}${seg('lang','zh','只有中文')}</div>
- <div class="lab">${t.read}</div><div class="row">${seg('read','py',t.py)}${seg('read','zy',t.zy)}${seg('read','both',t.both)}${seg('read','none',t.off)}</div>
- <div class="lab">${t.speed}</div><div class="row">${seg('speed','slow',t.slow)}${seg('speed','normal',t.norm)}${seg('speed','fast',t.fast)}</div>
- <div style="margin-top:16px"><button class="btn primary block" onclick="closeSet()">${t.ready}</button></div></div></div>`;
+ const t=T(),sc=cfg.zh==='sc',en=cfg.lang==='en';
+ /* 跟「跑吧！漢字」同款：中文大字在上、西文／英文小字在下；純中文模式只留中文 */
+ const D=(zt,zs,es,e)=>{const z=sc?zs:zt,sub=isZH()?'':(en?e:es);return sub?`<span class="dl"><span class="z">${z}</span><span class="s">${sub}</span></span>`:z;};
+ return `<div class="sheet" onclick="closeSet()"><div class="sheetcard" onclick="event.stopPropagation()"><h2 style="margin:0 0 4px">${D('設定','设置','Ajustes','Settings')}</h2>
+ <div class="lab">${D('字形','字形','Caracteres','Characters')}</div><div class="row">${seg('zh','tc','繁體')}${seg('zh','sc','简体')}</div>
+ <div class="lab">${D('語言','语言','Idioma','Language')}</div><div class="row">${seg('lang','es',`<span class="dl"><span class="z">中文＋</span><span class="s">Español</span></span>`)}${seg('lang','en',`<span class="dl"><span class="z">中文＋</span><span class="s">English</span></span>`)}${seg('lang','zh','只有中文')}</div>
+ <div class="lab">${D('拼音／注音','拼音／注音','Pinyin / Zhuyin','Pinyin / Zhuyin')}</div><div class="row r4">${seg('read','py',D('拼音','拼音','Pinyin','Pinyin'))}${seg('read','zy',D('注音','注音','Zhuyin','Zhuyin'))}${seg('read','both',D('兩個都顯示','两个都显示','Ambos','Both'))}${seg('read','none',D('關','关','Ocultar','Off'))}</div>
+ <div class="lab">${D('語速','语速','Velocidad de voz','Speech speed')}</div><div class="row">${seg('speed','slow',D('慢','慢','Lenta','Slow'))}${seg('speed','normal',D('正常','正常','Normal','Normal'))}${seg('speed','fast',D('快','快','Rápida','Fast'))}</div>
+ <div style="margin-top:16px"><button class="btn primary block" onclick="closeSet()">${D('完成','完成','Listo','Done')}</button></div></div></div>`;
 }
 function confirmHTML(){
  const t=T();
