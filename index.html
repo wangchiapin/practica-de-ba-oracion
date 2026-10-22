@@ -37,6 +37,11 @@ input[type=text]{width:100%;padding:11px 12px;border:1px solid var(--line);borde
 .dl{display:inline-flex;flex-direction:column;align-items:flex-start;text-align:left}
 .btn .dl,.seg .dl,.center .dl,figcaption .dl,.sheetcard h2 .dl{align-items:center;text-align:center}
 .dl .s{font-size:.72em;opacity:.7;font-weight:400}
+.btn.revbtn{display:flex;align-items:center;gap:10px;text-align:left;margin-top:8px}
+.revbtn .revt{flex:1}
+.revbtn .revn{min-width:26px;height:26px;border-radius:13px;background:var(--acc);display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:500}
+.revbtn .revc{color:var(--sub);font-size:14px}
+.revcard{margin-top:8px}
 .home{max-width:720px;margin:0 auto}
 .home h2.pick{font-size:16px;margin:18px 0 10px;font-weight:500}
 .home .lvcard{margin-bottom:10px}
@@ -940,7 +945,8 @@ async function lbLoad(){
 
 /* ---------- 流程 ---------- */
 function stopSp(){try{spId++;if('speechSynthesis' in window)speechSynthesis.cancel();}catch(e){}}
-function go(s){if(s==='levels')s='start';stopSp();ST.vocab=false;ST.look=null;ST.screen=s;ST.paused=false;ST.set=false;ST.confirm=null;ST.setPaused=false;render();window.scrollTo(0,0);}
+function toggleRev(){ST.revOpen=!ST.revOpen;render();}
+function go(s){if(s==='levels')s='start';ST.revOpen=false;stopSp();ST.vocab=false;ST.look=null;ST.screen=s;ST.paused=false;ST.set=false;ST.confirm=null;ST.setPaused=false;render();window.scrollTo(0,0);}
 function setShared(p){Object.assign(S,p);writeSettings(S);syncCfg();render();}
 function setCfg(k,v){
  if(k==='lang')return setShared({lang:v});
@@ -1126,12 +1132,13 @@ function renderResult(){
  let h=`<div class="card center"><h2>${t.done}</h2><div class="stars big">${starsStr(f.stars)}</div><div class="sub">${Tp().yourScore}: <b style="color:var(--ink);font-size:22px">${f.score}</b></div><div class="sub">${Tp().firstTry}: ${f.firstOK}/${ST.qs.length}</div>`;
  h+=`</div>`;
  const rev=ST.results.filter(r=>!(r.ok&&r.tries===1));
- h+=`<div class="card"><h2>${t.review}</h2>`;
- if(!rev.length)h+=`<div class="sub">${t.perfect}</div>`;
- h+=`<div class="revgrid">`;rev.forEach(r=>{h+=`<div class="rev">${pairHTML(r.q.s.id)}<div class="sent">${seqHTML(r.q.s.tok)}。</div>${transHTML(r.q.s)}</div>`;});h+=`</div>`;
- h+=`</div><div class="row"><button class="btn" style="flex:1" onclick="beginLevel()">${t.replay}</button>`;
+ h+=`<div class="row"><button class="btn" style="flex:1" onclick="beginLevel()">${t.replay}</button>`;
  if(ST.lv<3)h+=`<button class="btn primary" style="flex:1" onclick="openLevel(${ST.lv+1})">${t.nextLv}</button>`;
  h+=`</div><div class="row" style="margin-top:8px"><button class="btn" style="flex:1" onclick="go('levels')">${t.menu}</button><button class="btn" style="flex:1" onclick="openLB()">${t.rank}</button></div>`;
+ if(rev.length){   /* 需要複習：預設收起來，點開才看（錯很多題時，按鈕不會被推到下面） */
+  h+=`<button class="btn block revbtn ${ST.revOpen?'open':''}" onclick="toggleRev()" aria-expanded="${ST.revOpen?'true':'false'}"><span class="revt">${t.review}</span><span class="revn">${rev.length}</span><span class="revc">${ST.revOpen?'▴':'▾'}</span></button>`;
+  if(ST.revOpen){h+=`<div class="card revcard"><div class="revgrid">`;rev.forEach(r=>{h+=`<div class="rev">${pairHTML(r.q.s.id)}<div class="sent">${seqHTML(r.q.s.tok)}。</div>${transHTML(r.q.s)}</div>`;});h+=`</div></div>`;}
+ }
  return h;
 }
 function renderLB(){
