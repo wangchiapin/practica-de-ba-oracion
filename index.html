@@ -34,6 +34,9 @@ input[type=text]{width:100%;padding:11px 12px;border:1px solid var(--line);borde
 .bar .ic{width:38px;height:38px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:18px;color:var(--ink);cursor:pointer}
 .combo{color:var(--ok);font-weight:500}
 .lvcard{display:block;width:100%;text-align:left;padding:14px;margin-bottom:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;color:var(--ink);cursor:pointer;font-size:16px}
+.dl{display:inline-flex;flex-direction:column;align-items:flex-start;text-align:left}
+.btn .dl,.seg .dl,.center .dl,figcaption .dl,.sheetcard h2 .dl{align-items:center;text-align:center}
+.dl .s{font-size:.72em;opacity:.7;font-weight:400}
 .home{max-width:720px;margin:0 auto}
 .home h2.pick{font-size:16px;margin:18px 0 10px;font-weight:500}
 .home .lvcard{margin-bottom:10px}
@@ -859,7 +862,20 @@ function syncCfg(){cfg.lang=S.lang;cfg.zh=S.script==='simp'?'sc':'tc';cfg.read=P
 syncCfg();
 let prog;try{prog=JSON.parse(localStorage.getItem('ba_prog')||'{}');}catch(e){prog={};}
 const ST={paused:false,pauseAt:0,set:false,setPaused:false,confirm:null,confirmWasPaused:false,screen:'start',lv:0,qs:[],qi:0,score:0,streak:0,firstOK:0,results:[],cur:null,lbRows:null,final:null,look:null,vocab:false,vocabList:[]};
-const T=()=>cfg.lang==='zh'?(cfg.zh==='sc'?I.zhs:I.zh):I[cfg.lang];
+/* 介面文字：中文大字在上、西文／英文小字在下（跟「跑吧！漢字」同款）；純中文模式只有中文。
+   T()＝兩行版（放在區塊、按鈕裡）；Tp()＝同一行「中文 · 西文」（放在句子中間、placeholder、aria-label）。 */
+const _TC={};
+function _bil(inline){
+ const zhd=cfg.zh==='sc'?I.zhs:I.zh;if(cfg.lang==='zh')return zhd;
+ const key=cfg.lang+cfg.zh+(inline?'i':'b');if(_TC[key])return _TC[key];
+ const sub=I[cfg.lang],o={};
+ Object.keys(sub).forEach(k=>{const z=zhd[k],e=sub[k];
+  if(z===undefined||typeof z!=='string'||typeof e!=='string'){o[k]=e;return;}
+  let pre='';let zz=z,ee=e;if(zz.startsWith('▶ ')&&ee.startsWith('▶ ')){pre='▶ ';zz=zz.slice(2);ee=ee.slice(2);}
+  o[k]=inline?pre+zz+' · '+ee:`<span class="dl"><span class="z">${pre}${zz}</span><span class="s">${ee}</span></span>`;});
+ return _TC[key]=o;
+}
+const T=()=>_bil(false),Tp=()=>_bil(true);
 const isZH=()=>cfg.lang==='zh';
 const $=id=>document.getElementById(id);
 const saveCfg=()=>{try{localStorage.setItem('ba_cfg',JSON.stringify({name:cfg.name}));}catch(e){}};
@@ -950,7 +966,7 @@ function openSet(){ST.setPaused=pauseGame();ST.set=true;render();}
 function closeSet(){ST.set=false;if(ST.setPaused){ST.setPaused=false;resumeGame();}else render();}
 function openLevel(n){
  const el=$('nm'),v=(el?el.value:(cfg.name||'')).trim();
- if(!v){const e=$('nerr');if(e)e.textContent=T().needName;if(el){el.classList.add('err');el.focus();}return;}
+ if(!v){const e=$('nerr');if(e)e.textContent=Tp().needName;if(el){el.classList.add('err');el.focus();}return;}
  cfg.name=v;saveCfg();track('ba_start',{lang:cfg.lang,zh:cfg.zh,lv:n});ST.lv=n;beginLevel();
 }
 function variants(s){const t=s.tok;return BADPOOL[s.id].map(ix=>ix.map(i=>t[i]));}
@@ -1021,7 +1037,7 @@ function openVocab(){
 function vocabHTML(){
  const t=T();
  const rows=ST.vocabList.map(k=>{const g=gloss(k.tc);const main=cfg.lang==='es'?g[0]:g[1],other=cfg.lang==='es'?g[1]:g[0];
-  return `<div class="vrow"><div class="vz">${esc(zhOf(k))}</div><div class="vm"><div class="vp">${esc(readLine(k))}</div>${isZH()?'':`<div>${esc(main)}</div><div class="vp">${esc(other)}</div>`}</div><button class="vsp" onclick="speakWord('${k.tc}')" aria-label="${t.play}">▶</button></div>`;}).join('');
+  return `<div class="vrow"><div class="vz">${esc(zhOf(k))}</div><div class="vm"><div class="vp">${esc(readLine(k))}</div>${isZH()?'':`<div>${esc(main)}</div><div class="vp">${esc(other)}</div>`}</div><button class="vsp" onclick="speakWord('${k.tc}')" aria-label="${esc(Tp().play)}">▶</button></div>`;}).join('');
  return `<div class="sheet" onclick="closeLook()"><div class="sheetcard" onclick="event.stopPropagation()"><div class="row" style="justify-content:space-between"><h2 style="margin:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H19v15H5.5A1.5 1.5 0 0 0 4 20.5z"/><path d="M4 20.5V5.5"/><path d="M8.5 8.5h6M8.5 12h4"/></svg>${t.vocab}</h2><button class="btn ghost" onclick="closeLook()">${t.close}</button></div><div class="vlist">${rows}</div></div></div>`;
 }
 function setHTML(){
@@ -1050,13 +1066,13 @@ function sheetHTML(){
 async function openLB(){ST.lbRows=null;go('lb');ST.lbRows=await lbLoad();if(ST.screen==='lb')render();}
 
 /* ---------- 畫面 ---------- */
-function pairHTML(id){return `<div class="pair"><figure>${scene(id)[0]}<figcaption>${isZH()?'':'之前 · '}${T().before}</figcaption></figure><div class="ar">→</div><figure>${scene(id)[1]}<figcaption>${isZH()?'':'之後 · '}${T().after}</figcaption></figure></div>`;}
+function pairHTML(id){return `<div class="pair"><figure>${scene(id)[0]}<figcaption>${T().before}</figcaption></figure><div class="ar">→</div><figure>${scene(id)[1]}<figcaption>${T().after}</figcaption></figure></div>`;}
 function seg(k,v,label){return `<button class="seg ${cfg[k]===v?'on':''}" onclick="setCfg('${k}','${v}')">${label}</button>`;}
 function renderStart(){
  const t=T();
- let h=`<div class="home"><div class="bar"><div></div><button class="ic" onclick="openSet()" aria-label="${esc(t.settings)}">⚙</button></div>
- <div class="card center"><h1>把它放好</h1><div class="sub">${isZH()?'':'Ponlo en su lugar · '}${esc(t.sub)}</div></div>
- <div class="card"><div class="lab" style="margin-top:0">${t.name}</div><input id="nm" type="text" maxlength="16" placeholder="${esc(t.ph)}" value="${esc(cfg.name)}" oninput="this.classList.remove('err');$('nerr').textContent=''"><div class="nerr" id="nerr"></div>
+ let h=`<div class="home"><div class="bar"><div></div><button class="ic" onclick="openSet()" aria-label="${esc(Tp().settings)}">⚙</button></div>
+ <div class="card center"><h1>把它放好</h1><div class="sub">${t.sub}</div>${isZH()?'':'<div class="sub" style="font-size:12px;margin-top:2px">Ponlo en su lugar</div>'}</div>
+ <div class="card"><div class="lab" style="margin-top:0">${t.name}</div><input id="nm" type="text" maxlength="16" placeholder="${esc(Tp().ph)}" value="${esc(cfg.name)}" oninput="this.classList.remove('err');$('nerr').textContent=''"><div class="nerr" id="nerr"></div>
  <h2 class="pick">${t.pick}</h2><div class="lvgrid">`;
  LV.forEach((l,i)=>{const n=i+1,st=prog[n]||0;
   h+=`<button class="lvcard" onclick="openLevel(${n})"><div class="row" style="justify-content:space-between"><div class="t">${cfg.zh==='sc'?l.sc:l.tc}</div><div class="stars">${starsStr(st)}</div></div>${isZH()?'':`<div class="d">${l[cfg.lang]}</div>`}</button>`;});
@@ -1072,7 +1088,7 @@ function renderIntro(){
  <button class="btn" onclick="speak('${tcText(ex.tok)}')">${t.play}</button></div>
  <button class="btn primary block" onclick="beginLevel()">${t.begin}</button>`;
 }
-function topbar(){const t=T();return `<div class="bar gbar"><div class="gl">${ST.lv} · ${ST.qi+1}/${ST.qs.length}</div><div class="gs">${t.score} <b>${ST.score}</b>${ST.streak>=2?` · <span class="combo">${t.combo} ${ST.streak}</span>`:''}</div><div class="gb"><button class="ic" onclick="togglePause()" aria-label="${ST.paused?t.resume:t.pause}">${ST.paused?'▶':'⏸'}</button><button class="ic" onclick="openSet()" aria-label="${esc(t.settings)}">⚙</button></div></div>`;}
+function topbar(){const t=T();return `<div class="bar gbar"><div class="gl">${ST.lv} · ${ST.qi+1}/${ST.qs.length}</div><div class="gs">${Tp().score} <b>${ST.score}</b>${ST.streak>=2?` · <span class="combo">${Tp().combo} ${ST.streak}</span>`:''}</div><div class="gb"><button class="ic" onclick="togglePause()" aria-label="${esc(ST.paused?Tp().resume:Tp().pause)}">${ST.paused?'▶':'⏸'}</button><button class="ic" onclick="openSet()" aria-label="${esc(Tp().settings)}">⚙</button></div></div>`;}
 function renderGame(){
  const t=T(),q=ST.qs[ST.qi],c=ST.cur,s=q.s,last=ST.qi===ST.qs.length-1;
  if(ST.paused)return topbar()+`<div class="card center"><h2>${t.paused}</h2><div class="pcol"><button class="btn primary" onclick="togglePause()">▶ ${t.resume}</button><button class="btn" onclick="askConfirm('restart')">↻ ${t.restart}</button><button class="btn" onclick="askConfirm('menu')">⌂ ${t.menu}</button></div></div>`;
@@ -1098,7 +1114,7 @@ function renderGame(){
   const hintOK=!isZH()||q.type==='L';   /* 純中文模式沒有翻譯可提示，只有聽音題的「顯示句子」提示保留 */
   h+=`<div class="row bot">${c.hint||!hintOK?'':`<button class="btn ghost" onclick="useHint()">${t.hint}</button>`}</div>`;
  }else{
-  h+=`<div class="fb ${c.ok?'ok':'bad'}"><b>${c.ok?t.correct:t.wrong}</b> · +${c.pts} ${t.pts}${c.ok&&c.tries===1&&ST.streak>=2?' · '+t.combo+' ×'+mult():''}</div>`;
+  h+=`<div class="fb ${c.ok?'ok':'bad'}"><b>${c.ok?Tp().correct:Tp().wrong}</b> · +${c.pts} ${cfg.lang==='zh'?Tp().pts:'pts'}${c.ok&&c.tries===1&&ST.streak>=2?' · '+Tp().combo+' ×'+mult():''}</div>`;
   h+=`<div class="sent">${seqHTML(s.tok)}。</div><div class="taphint">${t.tapHint}</div>${transHTML(s)}`;
   h+=`<div class="row stick"><button class="btn" onclick="speak(curText())">${t.play}</button><button class="btn primary" style="flex:1" onclick="nextQ()">${last?t.finish:t.next}</button></div>`;
  }
@@ -1107,7 +1123,7 @@ function renderGame(){
 }
 function renderResult(){
  const t=T(),f=ST.final;
- let h=`<div class="card center"><h2>${t.done}</h2><div class="stars big">${starsStr(f.stars)}</div><div class="sub">${t.yourScore}: <b style="color:var(--ink);font-size:22px">${f.score}</b></div><div class="sub">${t.firstTry}: ${f.firstOK}/${ST.qs.length}</div>`;
+ let h=`<div class="card center"><h2>${t.done}</h2><div class="stars big">${starsStr(f.stars)}</div><div class="sub">${Tp().yourScore}: <b style="color:var(--ink);font-size:22px">${f.score}</b></div><div class="sub">${Tp().firstTry}: ${f.firstOK}/${ST.qs.length}</div>`;
  h+=`</div>`;
  const rev=ST.results.filter(r=>!(r.ok&&r.tries===1));
  h+=`<div class="card"><h2>${t.review}</h2>`;
@@ -1122,7 +1138,7 @@ function renderLB(){
  const t=T();
  let h=`<div class="bar"><button class="ic" onclick="go('levels')">←</button><div>${t.lb}</div><div></div></div><div class="card">`;
  if(ST.lbRows===null)h+=`<div class="sub">…</div>`;
- else{h+=`<table class="lbt"><tr><th>#</th><th>${t.player}</th><th>1</th><th>2</th><th>3</th><th>${t.total}</th></tr>`;
+ else{h+=`<table class="lbt"><tr><th>#</th><th>${Tp().player}</th><th>1</th><th>2</th><th>3</th><th>${Tp().total}</th></tr>`;
   ST.lbRows.forEach((r,i)=>{h+=`<tr><td>${i+1}</td><td>${esc(r.name)}</td><td>${r.l1||0}</td><td>${r.l2||0}</td><td>${r.l3||0}</td><td><b>${r.total||0}</b></td></tr>`;});
   h+=`</table>`;}
  if(!FB_OK)h+=`<div class="note">${t.localNote}</div>`;
