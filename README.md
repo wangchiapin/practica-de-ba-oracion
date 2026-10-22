@@ -13,10 +13,10 @@
 > Ejemplo: 我**把**書放在桌子上。 (Puse el libro sobre la mesa.)
 
 ### Cómo se juega
-- **30 oraciones en 3 niveles** (10 por nivel):
-  1. **放置類 · Colocar cosas** – 把書放在桌子上
-  2. **結果類 · Resultados** – 他把杯子打破了
-  3. **處置類 · Dar y transformar** – 我把禮物送給朋友
+- **371 oraciones en 3 niveles** (cada partida elige 10 al azar):
+  1. **關卡 1 · Nivel 1** – poner algo en un lugar: 把書放在桌子上
+  2. **關卡 2 · Nivel 2** – cómo queda algo: 他把杯子打破了
+  3. **關卡 3 · Nivel 3** – dar, llevar o deshacerse de algo: 我把禮物送給朋友
 - Cada nivel mezcla **3 tipos de pregunta**:
   - **Ordenar tarjetas**: mira las imágenes y ordena las palabras.
   - **Escuchar y elegir**: oye la oración (palabra por palabra) y elige la imagen de "después".
@@ -62,7 +62,7 @@ Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **
 > 誰 ＋ **把** ＋ 東西 ＋ 動作 ＋ 結果
 
 ### 玩法
-- 共 **371 句、3 關**（第 1 關 129、第 2 關 127、第 3 關 115）（每次遊玩隨機抽 10 題）：放置類、結果類、處置類
+- 共 **371 句、3 關**（第 1 關 129、第 2 關 127、第 3 關 115）（每次遊玩隨機抽 10 題）：關卡 1 是把東西放到某個地方、關卡 2 是東西變成什麼樣子、關卡 3 是給人、送去或處理掉
 - 每關混合三種題型：**排字卡**、**聽音選圖**、**選出正確的句子**（錯誤選項只用真正不通順的句子，不會拿掉「把」變成另一種自然說法）
 - 圖片全部用程式碼繪製，風格簡單乾淨
 

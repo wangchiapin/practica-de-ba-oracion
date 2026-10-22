@@ -780,7 +780,7 @@ function buildScene(id){const sp=SPEC[id];if(!sp)throw new Error('no scene '+id)
 function scene(id){return SC[id]||(SC[id]=buildScene(id));}
 const keysOf=id=>KEYS[id]||[];
 function pickOthers(s){const ks=keysOf(s.id);const all=shuffle(DATA.filter(d=>d.lv===s.lv&&d.id!==s.id&&!ambigPair(s.id,d.id)));const same=all.filter(d=>{const k=keysOf(d.id);return k[0]===ks[0]&&k[1]!==ks[1];});const ok=all.filter(d=>!keysOf(d.id).some(k=>ks.includes(k)));const out=[];if(same.length)out.push(same[0]);for(const d of (ok.length>=2?ok:all)){if(out.length>=2)break;if(!out.includes(d))out.push(d);}return out;}
-const LV=[{tc:'放置類',sc:'放置类',es:'Colocar cosas',en:'Placing things',ex:1},{tc:'結果類',sc:'结果类',es:'Resultados',en:'Results',ex:11},{tc:'處置類',sc:'处置类',es:'Dar y transformar',en:'Giving & changing',ex:21}];
+const LV=[{tc:'關卡 1',sc:'关卡 1',es:'Nivel 1',en:'Level 1',ex:1},{tc:'關卡 2',sc:'关卡 2',es:'Nivel 2',en:'Level 2',ex:11},{tc:'關卡 3',sc:'关卡 3',es:'Nivel 3',en:'Level 3',ex:21}];
 const I={es:{
  sub:'Practica la oración con 把',name:'Tu nombre',ph:'Escribe tu nombre',ui:'Idioma',script:'Caracteres',read:'Lectura',py:'Pinyin',zy:'Zhuyin',off:'Sin lectura',start:'Empezar',pick:'Elige un nivel',locked:'Bloqueado: consigue 1 estrella en el nivel anterior',rank:'Ranking',menu:'Menú',
  formula:'Fórmula',who:'Quién',thing:'Cosa',act:'Acción + resultado',begin:'Comenzar',example:'Ejemplo',
@@ -1043,14 +1043,14 @@ function renderLevels(){
  const t=T();
  let h=`<div class="bar"><button class="ic" onclick="go('start')" aria-label="back">←</button><div>${esc(cfg.name)}</div><button class="ic" onclick="openSet()" aria-label="${esc(t.settings)}">⚙</button></div><h2>${t.pick}</h2><div class="lvgrid">`;
  LV.forEach((l,i)=>{const n=i+1,ok=isUnlocked(n),st=prog[n]||0;
-  h+=`<button class="lvcard" ${ok?'':'disabled'} onclick="openLevel(${n})"><div class="row" style="justify-content:space-between"><div class="t">${n} · ${cfg.zh==='sc'?l.sc:l.tc}</div><div class="stars">${starsStr(st)}</div></div>${isZH()?'':`<div class="d">${l[cfg.lang]}</div>`}${ok?'':`<div class="d">${t.locked}</div>`}</button>`;});
+  h+=`<button class="lvcard" ${ok?'':'disabled'} onclick="openLevel(${n})"><div class="row" style="justify-content:space-between"><div class="t">${cfg.zh==='sc'?l.sc:l.tc}</div><div class="stars">${starsStr(st)}</div></div>${isZH()?'':`<div class="d">${l[cfg.lang]}</div>`}${ok?'':`<div class="d">${t.locked}</div>`}</button>`;});
  h+=`</div><button class="btn block" style="margin-top:12px" onclick="openLB()">${t.rank}</button>`;
  return h;
 }
 const sm=x=>isZH()?'':`<small>${x}</small>`;
 function renderIntro(){
  const t=T(),l=LV[ST.lv-1],ex=DATA.find(d=>d.id===l.ex);
- return `<div class="bar"><button class="ic" onclick="go('levels')">←</button><div>${ST.lv} · ${cfg.zh==='sc'?l.sc:l.tc}</div><div></div></div>
+ return `<div class="bar"><button class="ic" onclick="go('levels')">←</button><div>${cfg.zh==='sc'?l.sc:l.tc}</div><div></div></div>
  <div class="card"><h2>${t.formula}</h2><div class="formula"><div class="f">${cfg.zh==='sc'?'谁':'誰'}${sm(t.who)}</div><div>＋</div><div class="f ba">把</div><div>＋</div><div class="f">${cfg.zh==='sc'?'东西':'東西'}${sm(t.thing)}</div><div>＋</div><div class="f">${cfg.zh==='sc'?'动作＋结果':'動作＋結果'}${sm(t.act)}</div></div>
  <div class="lab">${t.example}</div><div class="sent">${seqHTML(ex.tok)}。</div>${transHTML(ex)}
  <button class="btn" onclick="speak('${tcText(ex.tok)}')">${t.play}</button></div>
