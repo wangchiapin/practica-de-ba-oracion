@@ -933,7 +933,7 @@ function confirmYes(){const k=ST.confirm;ST.confirm=null;ST.paused=false;if(k===
 function openSet(){ST.setPaused=pauseGame();ST.set=true;render();}
 function closeSet(){ST.set=false;if(ST.setPaused){ST.setPaused=false;resumeGame();}else render();}
 function startGame(){const v=($('nm')?$('nm').value:'').trim();cfg.name=v||T().defName;saveCfg();track('ba_start',{lang:cfg.lang,zh:cfg.zh});go('levels');}
-function openLevel(n){if(!isUnlocked(n))return;ST.lv=n;go('intro');}
+function openLevel(n){if(!isUnlocked(n))return;ST.lv=n;beginLevel();}
 function variants(s){const t=s.tok;return BADPOOL[s.id].map(ix=>ix.map(i=>t[i]));}
 function beginLevel(){
  const pool=shuffle(DATA.filter(d=>d.lv===ST.lv)).slice(0,10);
