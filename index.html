@@ -1105,7 +1105,7 @@ function renderGame(){
   h+=`<div class="tray">${c.tray.map(x=>`<button class="chip ${x.tc==='把'?'ba':''}" onclick="placeTok(${x.i})">${tokHTML(x)}</button>`).join('')}</div>`;
   h+=`<div class="row stick"><button class="btn primary" onclick="confirmA()" ${c.placed.length===s.tok.length?'':'disabled'}>${t.confirm}</button><button class="btn ghost" onclick="clearTok()">${t.clear}</button></div>`;
  }
- if(q.type==='P'){
+ if(q.type==='P'&&!(c.done&&c.opts[c.picked]&&c.opts[c.picked].ok)){   /* 答對後把選項拿掉，只留正確句子，跟排句子題一致 */
   c.opts.forEach((o,k)=>{const cls=c.done?(o.ok?'ok':(c.picked===k?'bad':'')):(c.locked.includes(k)?'bad':'');h+=`<button class="optS ${cls}" onclick="pickOpt(${k})"><span>${seqHTML(o.seq)}。</span></button>`;});
  }
  if(!c.done){
