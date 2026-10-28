@@ -54,7 +54,7 @@ Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **
 - Los tres niveles están abiertos desde el principio (no hay desbloqueo).
 - **Ranking compartido (Firebase Firestore):** ya está conectado al proyecto `memorma-24dab` (compartido con Memorama y Ordena el Armario), con inicio de sesión anónimo; los puntajes se guardan en la colección `baLeaderboard` (mejor puntaje de cada uno de los tres niveles, suma total, 10 mejores). La configuración está en `FIREBASE_CONFIG` de `index.html`; si no se puede conectar, el ranking solo se guarda en el dispositivo. Desde 2026-10-21 también se registran visitas, inicios y partidas terminadas (`visits` y `plays` del mismo proyecto; GA no cambia).
 - **GA4 (opcional):** escribe tu ID en `GA_ID`. Eventos: `ba_start`, `ba_level_start`, `ba_answer`, `ba_level_end`.
-- Para agregar o editar oraciones, las oraciones nuevas van al final de `RAW3` (palabras con caracteres tradicionales, simplificados, pinyin y zhuyin) y se registran en cuatro tablas por número: `LV2` (nivel), `SPEC` (qué imagen dibujar), `KEYS` (objeto y lugar/resultado, para que las opciones de «Escuchar y elegir» no se parezcan demasiado) y `PATMAP` (tipo de errores para «Elegir la oración correcta»). Los significados van en `GLOSS3`. Las imágenes se arman con piezas ya existentes (objetos `OB`, lugares `PL`, personas `PERS`, destinos `DS`).
+- Para agregar o editar oraciones, las oraciones nuevas van al final de `RAW3` (palabras con caracteres tradicionales, simplificados, pinyin y zhuyin) y se registran en cuatro tablas por número: `LV2` (nivel), `SPEC` (qué imagen dibujar), `KEYS` (objeto y lugar/resultado, para que las opciones de «Escuchar y elegir» no se parezcan demasiado) y `PATMAP` (tipo de errores para «Elegir la oración correcta»). Los significados van en `GLOSS3`. Las oraciones cuyas imágenes se parecen demasiado y no deben aparecer juntas en «Escuchar y elegir» se guardan en `SIMSET` (se genera comparando las imágenes; hay que volver a comprobarlo al agregar oraciones). Las imágenes se arman con piezas ya existentes (objetos `OB`, lugares `PL`, personas `PERS`, destinos `DS`).
 - La carpeta `docs/` guarda la tabla de revisión de todas las oraciones (`把字句檢查表.csv`), la tabla de lecturas (`讀音總表.csv`) y las listas «para revisar» de cada tanda nueva.
 
 ---
@@ -97,7 +97,7 @@ Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **
 - 排行榜已接到 Firebase 專案 `memorma-24dab`（與翻牌記憶、收納小達人共用，匿名登入，集合 `baLeaderboard`，前 10 名）；設定在 `index.html` 的 `FIREBASE_CONFIG`，連不上時只存在該裝置
 - 2026-10-21 起也記錄訪客、開始、玩完（同專案的 `visits`、`plays`，GA 不動）
 - 可選擇填入 `GA_ID` 啟用 GA4
-- 新增或修改句子：新句子加在 `RAW3` 最後面，再依編號登記到 `LV2`（第幾關）、`SPEC`（要畫什麼圖）、`KEYS`（東西＋地點或結果，讓聽音題的選項不會太像）、`PATMAP`（選句子題的錯誤句型），詞義加在 `GLOSS3`；圖用現成的物品（`OB`）、地點（`PL`）、人物（`PERS`）、目的地（`DS`）組起來
+- 新增或修改句子：新句子加在 `RAW3` 最後面，再依編號登記到 `LV2`（第幾關）、`SPEC`（要畫什麼圖）、`KEYS`（東西＋地點或結果，讓聽音題的選項不會太像）、`PATMAP`（選句子題的錯誤句型），詞義加在 `GLOSS3`；聽音題「圖片太像、不要同時出現」的句子記在 `SIMSET`（用圖片逐格比對產生），新增句子後要重新比對；圖用現成的物品（`OB`）、地點（`PL`）、人物（`PERS`）、目的地（`DS`）組起來
 - `docs/` 資料夾放全部句子的檢查表（`把字句檢查表.csv`）、讀音總表（`讀音總表.csv`）和每一批新句子的審查表
 
 ---
