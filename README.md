@@ -15,13 +15,15 @@
 ### Cómo se juega
 - En la **pantalla de inicio** (todo en una sola página) escribes tu **apodo** (obligatorio), eliges el nivel y juegas. Los textos de la interfaz se ven en dos líneas: chino grande y español/inglés pequeño.
 - **3 niveles** con un banco de oraciones que sigue creciendo (cada partida elige 10 al azar):
-  1. **關卡 1 · Nivel 1** – poner algo en un lugar: 把書放在桌子上
-  2. **關卡 2 · Nivel 2** – cómo queda algo: 他把杯子打破了
-  3. **關卡 3 · Nivel 3** – dar, llevar o deshacerse de algo: 我把禮物送給朋友
+  1. **關卡 1 · Nivel 1** – poner algo en un lugar (poner, colgar, pegar, meter, clavar/insertar, ponerse): 把書放在桌子上
+  2. **關卡 2 · Nivel 2** – cómo queda algo (romper, limpiar, abrir/cerrar, encender/apagar, llenar/vaciar, borrar…): 他把杯子打破了
+  3. **關卡 3 · Nivel 3** – dar, llevar o deshacerse de algo (dar, enviar, prestar, entregar, llevar a, mover a): 我把禮物送給朋友
 - Cada nivel mezcla **3 tipos de pregunta**:
   - **Ordenar tarjetas**: mira las imágenes y ordena las palabras.
   - **Escuchar y elegir**: oye la oración (palabra por palabra) y elige la imagen de "después".
   - **Elegir la oración correcta** (al acertar, las opciones desaparecen y queda solo la oración, igual que en los otros dos tipos): una frase correcta y dos incorrectas (solo se usan errores que de verdad no se pueden decir, por ejemplo 把 mal colocado o sin el complemento final; nunca una frase natural sin 把).
+- Los tres niveles también incluyen **oraciones negativas**: «沒把…» (no lo hice) y «別把…» (no lo hagas). En «沒把» la imagen del «después» es igual a la del «antes» con una ✕; en «別把» se dibuja el resultado con una ✕. Las oraciones con «別把» no salen en «Escuchar y elegir».
+- Muchos objetos aparecen **en pareja**: el mismo objeto con resultados distintos (abrir/cerrar, ensuciar/limpiar, llenar/vaciar…), y en «Escuchar y elegir» la otra mitad de la pareja suele aparecer entre las opciones, así que hay que fijarse en la imagen del «después».
 - Todas las imágenes están dibujadas con código (SVG), con un estilo sencillo y limpio.
 
 ### Puntos
@@ -52,7 +54,8 @@ Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **
 - Los tres niveles están abiertos desde el principio (no hay desbloqueo).
 - **Ranking compartido (Firebase Firestore):** ya está conectado al proyecto `memorma-24dab` (compartido con Memorama y Ordena el Armario), con inicio de sesión anónimo; los puntajes se guardan en la colección `baLeaderboard` (mejor puntaje de cada uno de los tres niveles, suma total, 10 mejores). La configuración está en `FIREBASE_CONFIG` de `index.html`; si no se puede conectar, el ranking solo se guarda en el dispositivo. Desde 2026-10-21 también se registran visitas, inicios y partidas terminadas (`visits` y `plays` del mismo proyecto; GA no cambia).
 - **GA4 (opcional):** escribe tu ID en `GA_ID`. Eventos: `ba_start`, `ba_level_start`, `ba_answer`, `ba_level_end`.
-- Para agregar o editar oraciones, modifica el arreglo `RAW` (palabras con caracteres tradicionales, simplificados, pinyin y zhuyin), el diccionario `GLOSS` (significados) y el dibujo correspondiente en `SC`.
+- Para agregar o editar oraciones, las oraciones nuevas van al final de `RAW3` (palabras con caracteres tradicionales, simplificados, pinyin y zhuyin) y se registran en cuatro tablas por número: `LV2` (nivel), `SPEC` (qué imagen dibujar), `KEYS` (objeto y lugar/resultado, para que las opciones de «Escuchar y elegir» no se parezcan demasiado) y `PATMAP` (tipo de errores para «Elegir la oración correcta»). Los significados van en `GLOSS3`. Las imágenes se arman con piezas ya existentes (objetos `OB`, lugares `PL`, personas `PERS`, destinos `DS`).
+- La carpeta `docs/` guarda la tabla de revisión de todas las oraciones (`把字句檢查表.csv`), la tabla de lecturas (`讀音總表.csv`) y las listas «para revisar» de cada tanda nueva.
 
 ---
 
@@ -64,9 +67,10 @@ Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **
 
 ### 玩法
 - **首頁只有一頁**：輸入暱稱（必填）、選關卡、開始玩；介面文字分兩行，上面中文大字、下面西文／英文小字
-- 共 **3 關**，題庫會持續增加（每次遊玩隨機抽 10 題）：關卡 1 是把東西放到某個地方、關卡 2 是東西變成什麼樣子、關卡 3 是給人、送去或處理掉
+- 共 **3 關**，題庫會持續增加（每次遊玩隨機抽 10 題）：關卡 1 是把東西放到某個地方（放、掛、貼、塞、插、戴）、關卡 2 是東西變成什麼樣子（打破、洗乾淨、打開／關上、倒滿／倒空、擦掉…）、關卡 3 是給人、送去或處理掉（給、寄、送、借、交、帶到、搬到）
 - 每關混合三種題型：**排字卡**、**聽音選圖**、**選出正確的句子**（答對後選項會收起來，只留下句子，三種題型的答對畫面一致；錯誤選項只用真正不通順的句子，不會拿掉「把」變成另一種自然說法）
 - 三個關卡裡也混了否定句「沒把…」和「別把…」：「沒把」的「之後」圖和「之前」一樣並打 ✕，「別把」畫出做了的結果並打 ✕；「別把」不出聽音選圖
+- 很多東西會**成對出現**：同一個東西、不同結果（打開／關上、弄髒／洗乾淨、倒滿／倒空…）；聽音選圖時，成對的另一句常會出現在選項裡，要看「之後」的圖才分得出來
 - 圖片全部用程式碼繪製，風格簡單乾淨
 
 ### 計分與結束
@@ -93,6 +97,8 @@ Se necesita al menos ★ para desbloquear el siguiente nivel. Al final hay un **
 - 排行榜已接到 Firebase 專案 `memorma-24dab`（與翻牌記憶、收納小達人共用，匿名登入，集合 `baLeaderboard`，前 10 名）；設定在 `index.html` 的 `FIREBASE_CONFIG`，連不上時只存在該裝置
 - 2026-10-21 起也記錄訪客、開始、玩完（同專案的 `visits`、`plays`，GA 不動）
 - 可選擇填入 `GA_ID` 啟用 GA4
+- 新增或修改句子：新句子加在 `RAW3` 最後面，再依編號登記到 `LV2`（第幾關）、`SPEC`（要畫什麼圖）、`KEYS`（東西＋地點或結果，讓聽音題的選項不會太像）、`PATMAP`（選句子題的錯誤句型），詞義加在 `GLOSS3`；圖用現成的物品（`OB`）、地點（`PL`）、人物（`PERS`）、目的地（`DS`）組起來
+- `docs/` 資料夾放全部句子的檢查表（`把字句檢查表.csv`）、讀音總表（`讀音總表.csv`）和每一批新句子的審查表
 
 ---
 
