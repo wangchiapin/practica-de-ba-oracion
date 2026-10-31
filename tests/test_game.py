@@ -21,10 +21,11 @@ FAKE_FB = r"""
     path, id: path.split('/').pop(),
     async get(){ if (path.startsWith('portalStatus') && window.__failPortal) throw new Error('portal-fail');
       return { exists: path in DB, id: path.split('/').pop(), data: () => DB[path] && clone(DB[path]) }; },
-    async set(d){ if (window.__denyScores && path.startsWith('class_scores')) { const e = new Error('denied'); e.code = 'permission-denied'; throw e; }
+    async set(d){ if (window.__hangReport && path.startsWith('game_reports')) return new Promise(() => {});
+      if (window.__denyScores && path.startsWith('class_scores')) { const e = new Error('denied'); e.code = 'permission-denied'; throw e; }
       ops.push({k:'set', p:path, d:clone(d)}); DB[path] = clone(d); },
     async update(d){ ops.push({k:'update', p:path, d:clone(d)}); DB[path] = Object.assign(DB[path]||{}, clone(d)); } }; }
-  function colRef(path){ const q = { doc: id => docRef(path + '/' + id),
+  function colRef(path){ const q = { doc: id => docRef(path + '/' + (id || ('D' + (window.__ops.length + 1) + Math.random().toString(36).slice(2, 6)))),
     async add(d){ ops.push({k:'add', p:path, d:clone(d)}); const id = 'A' + ops.length; DB[path + '/' + id] = clone(d); return { id }; },
     where(){ return q; }, orderBy(){ return q; }, limit(){ return q; },
     async get(){ const ks = Object.keys(DB).filter(k => k.startsWith(path + '/') && depth(k) === depth(path) + 1);
@@ -298,7 +299,7 @@ with sync_playwright() as p:
     pg.evaluate("repOpen()"); pg.wait_for_timeout(100)
     pg.evaluate("repWhy('wrong')")
     pg.evaluate("repSend()"); pg.wait_for_timeout(600)
-    rep = [o for o in pg.evaluate("window.__ops") if o['k'] == 'add' and o['p'] == 'game_reports']
+    rep = [o for o in pg.evaluate("window.__ops") if o['k'] in ('add', 'set') and o['p'].startswith('game_reports')]
     R.check(len(rep) == 1, '回報寫入 game_reports 一筆')
     if rep:
         d = rep[0]['d']
@@ -306,5 +307,61 @@ with sync_playwright() as p:
         R.check(d.get('done') is False, '回報預設未處理')
         R.check(pg.evaluate("ST.rep.st") == 'ok', '回報成功後畫面狀態 ok')
     b.close()
+
+    # 網路卡住：超過 15 秒要顯示失敗、按鈕恢復；再送一次只寫同一筆（不重複）
+    b, pg, errs = page(p)
+    start(pg, 1)
+    pg.evaluate("window.__hangReport = true")
+    pg.evaluate("repOpen()"); pg.wait_for_timeout(100)
+    pg.evaluate("repWhy('wrong')")
+    pg.evaluate("setTimeout(repSend, 0)"); pg.wait_for_timeout(1000)
+    R.check(pg.evaluate("ST.rep.st") == 'sending', '網路卡住：先顯示送出中')
+    pg.wait_for_timeout(15500)
+    R.check(pg.evaluate("ST.rep.st") == 'err', '網路卡住：超過 15 秒顯示失敗')
+    R.check('disabled' not in pg.evaluate("repHtml()"), '失敗後送出按鈕恢復可按')
+    pg.evaluate("window.__hangReport = false")
+    pg.evaluate("repSend()"); pg.wait_for_timeout(600)
+    R.check(pg.evaluate("ST.rep.st") == 'ok', '再送一次成功')
+    docs = [k for k in pg.evaluate("Object.keys(window.__db)") if k.startswith('game_reports/')]
+    R.check(len(docs) == 1, f'重送只寫同一筆（{len(docs)} 筆）')
+    b.close()
+
+    # 手機版版面：遊戲畫面整頁不捲動，題目卡片在裡面捲、底部按鈕一直看得到
+    for (w, h) in [(390, 760), (360, 520)]:
+        b, pg, errs = page(p, width=w, height=h)
+        start(pg, 1)
+        m = pg.evaluate("""(() => { const d = document.documentElement, q = document.querySelector('.qcard'), st = document.querySelector('.stick');
+          const r = st ? st.getBoundingClientRect() : null;
+          return {page: d.scrollHeight - innerHeight, win: innerHeight, qs: q ? q.scrollHeight - q.clientHeight : -1,
+                  top: document.querySelector('.gbar').getBoundingClientRect().top, stickBottom: r ? r.bottom : -1, stickTop: r ? r.top : -1}; })()""")
+        R.check(m['page'] <= 1, f'{w}x{h}：整頁不會捲動（多出 {m["page"]}px）')
+        R.check(m['top'] >= 0, f'{w}x{h}：最上面的列看得到（top={m["top"]}）')
+        if m['stickBottom'] >= 0:   # 聽力／選句子題作答前沒有底部按鈕列，只有排句子題和答完後才有
+            R.check(0 <= m['stickTop'] and m['stickBottom'] <= m['win'] + 1, f'{w}x{h}：底部按鈕在畫面內（{m["stickTop"]:.0f}~{m["stickBottom"]:.0f} / {m["win"]}）')
+        pg.evaluate("document.querySelector('.qcard').scrollTop = 99999"); pg.wait_for_timeout(100)
+        pg.evaluate("window.scrollTo(0, 99999)"); pg.wait_for_timeout(100)
+        R.check(pg.evaluate("window.scrollY") == 0, f'{w}x{h}：想捲整頁也捲不動')
+        pg.evaluate("document.querySelector('.qcard').scrollTop = 0")
+        R.check(pg.evaluate("document.querySelector('.gbar').getBoundingClientRect().top") >= 0, f'{w}x{h}：怎麼捲上面都不會被切掉')
+        b.close()
+
+    # 手機版首頁／排行榜：整頁不捲動，內容在 #app 裡面捲，最上面一定回得去，版權小字看得到
+    for scr in ['start', 'lb']:
+        b, pg, errs = page(p, width=390, height=640)
+        pg.evaluate("(a)=>{ST.screen=a; render();}", scr); pg.wait_for_timeout(200)
+        m = pg.evaluate("""(() => { const d = document.documentElement, a = document.getElementById('app'), c = document.getElementById('hgCopy');
+          return {page: d.scrollHeight - innerHeight, inner: a.scrollHeight - a.clientHeight, copyBottom: c ? c.getBoundingClientRect().bottom : -1, win: innerHeight}; })()""")
+        R.check(m['page'] <= 1, f'{scr}：整頁不會捲動（多出 {m["page"]}px）')
+        if scr == 'start':   # 排行榜沒資料時內容很短，不需要捲
+            R.check(m['inner'] > 0, f'{scr}：內容比螢幕長時在 #app 裡面捲（{m["inner"]}px）')
+        pg.evaluate("document.getElementById('app').scrollTop = 99999"); pg.wait_for_timeout(100)
+        pg.evaluate("window.scrollTo(0, 99999)"); pg.wait_for_timeout(100)
+        R.check(pg.evaluate("window.scrollY") == 0, f'{scr}：整頁怎麼捲都不動')
+        pg.evaluate("document.getElementById('app').scrollTop = 0"); pg.wait_for_timeout(100)
+        top = pg.evaluate("document.getElementById('app').getBoundingClientRect().top")
+        R.check(top >= 0 and pg.evaluate("document.getElementById('app').scrollTop") == 0, f'{scr}：捲回頂端後最上面完整看得到')
+        if m['copyBottom'] >= 0:
+            R.check(m['copyBottom'] <= m['win'] + 1, f'{scr}：版權小字在畫面內（{m["copyBottom"]:.0f} / {m["win"]}）')
+        b.close()
 
 print('FAILS', R.fails); sys.exit(1 if R.fails else 0)

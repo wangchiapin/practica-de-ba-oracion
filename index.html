@@ -85,7 +85,7 @@ figcaption{font-size:12px;color:var(--sub);text-align:center;margin-top:2px}
 .pics.L{justify-content:flex-start}
 .pics{min-height:calc((min(100vw,520px) - 84px)/2*.66 + 30px);display:flex;flex-direction:column;justify-content:center}
 .pics .pair{margin-bottom:0}
-.qcard{min-height:656px;display:flex;flex-direction:column}
+.qcard{display:flex;flex-direction:column}   /* 2026-10-31：拿掉手機的最小高度 656px，卡片依內容長高，不再硬把頁面撐得比螢幕高（iPhone Chrome 捲動被切掉的測試） */
 .qtop{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
 .qtop .qlabel{flex:1}
 .dictb{flex:none;white-space:nowrap}
@@ -160,6 +160,20 @@ rt{font-size:.5em;color:var(--sub);font-weight:400;letter-spacing:0}
 .vsp{width:48px;height:48px;border:1px solid #b3a994;border-radius:10px;background:#fff;font-size:16px;color:var(--ink);cursor:pointer;flex:none}
 .sent .tk{border-bottom:1px dotted #b3a994;cursor:pointer}
 @media (max-width:380px){.optS{font-size:18px;padding:4px 8px}}
+/* 2026-10-31 手機版：網頁本身固定成螢幕高度、不整頁捲動；首頁／結果頁由 #app 在裡面捲，題目畫面則由題目卡片在裡面捲
+   （照天打雷劈的做法，避開 iPhone Chrome 往下捲後上面被切掉、回不到頂端） */
+@media (max-width:859px){
+ html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+ body{display:flex;flex-direction:column;height:100vh;height:100dvh}
+ #app{flex:1 1 auto;min-height:0;width:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+ html.gfix #hgCopy{display:none}
+ #app.gfix{display:flex;flex-direction:column;overflow:hidden;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+ #app.gfix>.gbar{flex:none}
+ #app.gfix .slots{min-height:84px}
+ #app.gfix .tray{min-height:92px}
+ #app.gfix>.qcard{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;margin-bottom:0}
+}
+
 @media (min-width:860px){
  #app{max-width:1040px;padding:calc(24px + env(safe-area-inset-top,0px)) 28px 72px}
  h1{font-size:34px}
@@ -1105,7 +1119,7 @@ if(document.readyState!=='loading')clsBoot();
 /* ---------- 流程 ---------- */
 function stopSp(){try{spId++;if('speechSynthesis' in window)speechSynthesis.cancel();}catch(e){}}
 function toggleRev(){ST.revOpen=!ST.revOpen;render();}
-function go(s){if(s==='levels')s='start';ST.revOpen=false;stopSp();ST.vocab=false;ST.look=null;ST.screen=s;ST.paused=false;ST.set=false;ST.confirm=null;ST.setPaused=false;render();window.scrollTo(0,0);}
+function go(s){if(s==='levels')s='start';ST.revOpen=false;stopSp();ST.vocab=false;ST.look=null;ST.screen=s;ST.paused=false;ST.set=false;ST.confirm=null;ST.setPaused=false;render();window.scrollTo(0,0);{const a=$('app');if(a)a.scrollTop=0;}}
 function setShared(p){Object.assign(S,p);writeSettings(S);syncCfg();render();}
 function setCfg(k,v){
  if(k==='lang')return setShared({lang:v});
@@ -1197,8 +1211,11 @@ async function repConn(){
  if(!firebase.firestore)await loadScript(SDK+'firebase-firestore-compat.js');
  const app=firebase.apps.find(a=>a.name==='central')||firebase.initializeApp(REP_CENTRAL,'central');
  if(!app.auth().currentUser)await app.auth().signInAnonymously();   /* 匿名登入，按了才連線 */
- return repDb=app.firestore();
+ const db=app.firestore();
+ try{db.settings({experimentalAutoDetectLongPolling:true,merge:true});}catch(e){}   /* 手機網路差時自動換成比較穩的連線方式（2026-10-31） */
+ return repDb=db;
 }
+function repTimeout(p,ms){let t;return Promise.race([p,new Promise((_,rej)=>{t=setTimeout(()=>rej(new Error('timeout')),ms);})]).finally(()=>clearTimeout(t));}   /* 超過時間就當失敗，不會一直卡在「送出中」 */
 function repHtml(){const r=ST.rep,t=T();
  if(!r)return `<button class="btn ghost repbtn" onclick="repOpen()">🚩 ${t.flag}</button>`;
  if(r.st==='ok')return `<div class="repmsg ok">✅ ${t.rSent}</div>`;
@@ -1230,8 +1247,9 @@ async function repSend(){const r=ST.rep;if(!r||r.st==='sending')return;
  if(!r.why){r.msg='rPick';return drawRep();}
  const n=$('repNote');if(n)r.note=n.value;
  const at=ST.cur;r.st='sending';r.msg='rSending';drawRep();
- try{const db=await repConn();
-  await db.collection('game_reports').add(Object.assign(repData(),{done:false,at:firebase.firestore.FieldValue.serverTimestamp()}));
+ try{const db=await repTimeout(repConn(),15000);
+  if(!r.ref)r.ref=db.collection('game_reports').doc();   /* 同一次回報重送時寫同一筆，不會重複 */
+  await repTimeout(r.ref.set(Object.assign(repData(),{done:false,at:firebase.firestore.FieldValue.serverTimestamp()})),15000);
   r.st='ok';r.msg='';
  }catch(e){console.warn('report failed',e);r.st='err';r.msg='rFail';}
  if(ST.cur===at&&ST.rep===r)drawRep();}
@@ -1370,7 +1388,7 @@ function render(){
  const m={start:renderStart,levels:renderStart,intro:renderIntro,game:renderGame,result:renderResult,lb:renderLB};
  const el=$('app');if(!el)return;
  const nm=$('nm');if(nm&&ST.screen==='start')cfg.name=nm.value;
- el.className='';document.title=isZH()?'把':'把 · '+NAME2();
+ const gf=ST.screen==='game';el.className=gf?'gfix':'';document.documentElement.classList.toggle('gfix',gf);document.title=isZH()?'把':'把 · '+NAME2();
  el.innerHTML=m[ST.screen]()+sheetHTML();
 }
 document.addEventListener('click',e=>{const tk=e.target.closest&&e.target.closest('.tk');if(!tk)return;if(!tk.closest('.sent'))return;e.stopPropagation();e.preventDefault();showLook(tk.dataset.t);},true);
