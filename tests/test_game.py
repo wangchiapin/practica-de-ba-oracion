@@ -736,11 +736,13 @@ with sync_playwright() as p:
     R.check(pg.evaluate("ST.screen") == 'result' and not errs, '成績寫入被拒：結果頁照常顯示，沒有網頁錯誤 %s' % errs)
     b.close()
 
-# ===== 積木組句（只有把遊戲）：句子帶 bl = 人物.物品.地點，圖由程式現場畫，不存圖片 =====
-if GAME == 'ba':
+# ===== 積木組句：句子帶 bl（把＝人物.物品.地點；被＝事件.人物），圖由程式現場畫，不存圖片 =====
+if True:
     def blk_entries():
         es = cust_entries(10)
-        for i, k in enumerate(['me.book.table', 'mom.milk.fridge', 'lbro.ball.floor', 'dad.bike.porch', 'xx.yy.zz', 'me.book']): es[i]['bl'] = k
+        recipes = ['me.book.table', 'mom.milk.fridge', 'lbro.ball.floor', 'dad.bike.porch', 'xx.yy.zz', 'me.book'] if GAME == 'ba' else \
+                  ['brk_plate.ming', 'dirty_cup.mom', 'd_phone_sell.me', 'spill_milk.lsis', 'xx_yy.me', 'brk_plate']
+        for i, k in enumerate(recipes): es[i]['bl'] = k
         return es
     with sync_playwright() as p:
         b, pg, errs = page(p, '?bank=' + SID, db=cust_db([], blk_entries()))
