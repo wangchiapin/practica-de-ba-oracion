@@ -1,7 +1,7 @@
 # 把／被 練習遊戲測試（兩款是同一套程式，這份檔案兩個 repo 內容相同，會依資料夾名稱判斷是哪一款）
 # 涵蓋：維修開關（ba 看 portalStatus/center-ba、bei 看 center-bei）＋ ?preview ＋ ?class 各種狀態、
 #       共用設定每個值（字形／語言／拼音注音／語速）、星等門檻邊界、計分、全部關卡都開放、班級成績回傳、題目回報
-import os, sys, json, re
+import os, sys, json, re, subprocess
 from playwright.sync_api import sync_playwright
 import common
 from common import *
@@ -703,6 +703,7 @@ with sync_playwright() as p:
     # 玩兩題都答錯（2 次機會用完）：ok = 0
     b, pg, errs = page(p, '?class=' + CID + '&bank=' + SID, db=clsdb)
     pg.fill('#nm', 'Zoe'); pg.locator('#bankStart').click(); pg.wait_for_timeout(400)
+    pg.evaluate("()=>{ST.qs[0].type='A';ST.qi=0;newCur();render();}"); pg.wait_for_timeout(150)   # 固定成排卡片題：答錯一定是錯（自訂句子重複時，選項文字可能跟答案一樣）
     solve_one(pg, False); solve_one(pg, False); R.check(pg.evaluate("ST.cur.done && !ST.cur.ok"), '兩次都答錯：這題結束')
     pg.evaluate("nextQ()")
     for i in range(9):
@@ -734,6 +735,48 @@ with sync_playwright() as p:
     pg.wait_for_timeout(600)
     R.check(pg.evaluate("ST.screen") == 'result' and not errs, '成績寫入被拒：結果頁照常顯示，沒有網頁錯誤 %s' % errs)
     b.close()
+
+# ===== 積木組句（只有把遊戲）：句子帶 bl = 人物.物品.地點，圖由程式現場畫，不存圖片 =====
+if GAME == 'ba':
+    def blk_entries():
+        es = cust_entries(10)
+        for i, k in enumerate(['me.book.table', 'mom.milk.fridge', 'lbro.ball.floor', 'dad.bike.porch', 'xx.yy.zz', 'me.book']): es[i]['bl'] = k
+        return es
+    with sync_playwright() as p:
+        b, pg, errs = page(p, '?bank=' + SID, db=cust_db([], blk_entries()))
+        R.check(pg.evaluate("BANK.cust.filter(x=>x.sv).length") == 4, '積木組句：4 句有效配方畫出圖，壞配方（不存在的鍵、少一段）當沒有圖')
+        R.check(pg.evaluate("BANK.cust.filter(x=>x.img.startsWith('data:image/svg+xml')).length") == 4, '積木組句：圖是程式畫的 SVG')
+        R.check(pg.evaluate("Object.keys(window.__db||{}).filter(k=>k.startsWith('shared_babimgs')).length") == 0, '積木組句：不需要讀圖片文件')
+        pg.fill('#nm', 'Ana'); pg.locator('#bankStart').click(); pg.wait_for_timeout(400)
+        force(pg, 0, 'A')
+        R.check(pg.locator('.pimg').count() == 1 and pg.locator('.tbox').count() == 0, '積木組句（排卡片）：顯示畫出來的圖')
+        r = pg.evaluate("(()=>{const e=document.querySelector('.pimg');const b=e.getBoundingClientRect();return b.width/b.height;})()")
+        R.check(1.4 < r < 1.7, '積木組句的圖保持原本比例（不裁切）%.2f' % r)
+        solve_one(pg, True); R.check(pg.evaluate("ST.cur.done && ST.cur.ok"), '積木組句：看圖排卡片答對')
+        force(pg, 1, 'P')
+        R.check(pg.locator('.pimg').count() == 1 and pg.locator('button.optS').count() == 3, '積木組句：看圖選句子')
+        solve_one(pg, True); R.check(pg.evaluate("ST.cur.done && ST.cur.ok"), '積木組句：看圖選句子答對')
+        force(pg, 2, 'L')
+        R.check(pg.evaluate("ST.cur.pic") is True and pg.locator('.opt3 .pimg').count() == 3, '積木組句：4 張圖 ≥ 3，聽句選圖三張可選')
+        solve_one(pg, True); R.check(pg.evaluate("ST.cur.done && ST.cur.ok"), '積木組句：聽句選圖答對')
+        force(pg, 4, 'A'); R.check(pg.locator('.pimg').count() == 0 and pg.locator('.tbox').count() == 1, '壞配方的句子：照出文字題')
+        R.check(not errs, '積木組句沒有網頁錯誤 %s' % errs)
+        b.close()
+        # 跟老師上傳的圖混在一起：積木的圖不會被覆蓋掉
+        es = blk_entries()
+        for i in (6, 7): es[i]['im'] = '1ab%d00xyz' % i
+        d = cust_db([], es); d['shared_babanks/' + SID]['updatedAt'] = 1
+        d['shared_babimgs/' + SID + '_1'] = {'owner': 'T1', 'imgs': {'ab600xyz': JPG, 'ab700xyz': JPG}, 'updatedAt': 1}
+        b, pg, errs = page(p, '?bank=' + SID, db=d)
+        R.check(pg.evaluate("BANK.cust.filter(x=>x.img).length") == 6 and pg.evaluate("BANK.cust.filter(x=>x.sv&&x.img).length") == 4, '積木的圖與老師上傳的圖混用：6 句有圖，積木的 4 張沒被蓋掉')
+        pg.fill('#nm', 'Ana'); pg.locator('#bankStart').click(); pg.wait_for_timeout(400)
+        for i in range(10):
+            solve_one(pg, True); pg.evaluate("nextQ()")
+        pg.wait_for_timeout(300)
+        R.check(pg.evaluate("ST.screen") == 'result' and not errs, '混用的句庫：玩完一輪沒有錯誤 %s' % errs)
+        b.close()
+    _r = subprocess.run([sys.executable, os.path.join(os.path.dirname(__file__), '..', 'tools', 'make_blocks.py'), '--check'], capture_output=True, text=True)
+    R.check(_r.returncode == 0, 'blocks.json 與遊戲一致、每個組合都畫得出來：' + (_r.stdout + _r.stderr).strip()[:120])
 
 # ===== 句子清單檔 sentences.json 要跟 index.html 的句子一致（老師中心「自訂句庫」靠它挑句子）=====
 import subprocess

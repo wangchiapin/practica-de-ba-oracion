@@ -139,3 +139,5 @@ iPhone 版 Chrome 上，頁面可以捲動時，往下捲之後有時回不到�
 - **逐題紀錄（訂閱老師的句庫班級連結）：** 玩完一回合，`class_scores` 之後再寫一筆 `class_plays`（`{cid,owner,game,h,nick,at,k,score,qs[{s句子文字,t題型A/L/P,f第一次答對0/1,ok最後答對0/1,w選錯的內容[]}]}`，最多 30 題）；包在 try/catch，失敗不影響成績。老師中心用它做「最常答錯的句子」「各學生」與「逐題明細 CSV」。試玩（`preview`）與沒有班級連結時不寫。規則見 game-kit `subscription-48d3c.rules.txt`。
 
 - **sentences-tk.json：** 跟 `sentences.json` 一起由 `tools/make_sentences.py` 產生，每句多了逐詞「繁|簡|拼音|注音」，給老師中心的學習單用；遊戲本身不讀它。遊戲句子有變時要重新執行 `python3 tools/make_sentences.py`（測試會檢查是否過期）。
+
+- **積木組句（blocks.json）：** 老師中心「積木組句」分頁的選項資料。`tools/make_blocks.py` 產生：中文詞與讀音取自遊戲現有的「放置」句子（GoodTeacher），西英文與「哪些物品能放哪裡」手寫在 `tools/blocks_data.py`，產生時會實際用 `sceneP` 畫過每個組合（畫不出來就失敗）。自訂句子的 `bl:'人物.物品.地點'`（例 `mom.milk.fridge`）讓遊戲現場畫圖，當成有圖的自訂句；壞配方當沒有圖。新增物品／地點要同時改 `blocks_data.py` 並重新執行 `python3 tools/make_blocks.py`（測試會檢查）。只有把，被先不做。
