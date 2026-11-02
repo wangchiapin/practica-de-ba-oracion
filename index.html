@@ -1135,12 +1135,12 @@ function custParse(c,i){
  if(!c||!Array.isArray(c.tk)||!c.tk.length||c.tk.length>8)return null;
  const tok=c.tk.map(x=>{const a=cleanS(x,80).split('|');return{tc:a[0]||'',sc:a[1]||a[0]||'',py:a[2]||'',zy:a[3]||''};});
  if(tok.some(t=>!t.tc))return null;
- const o={id:'c'+(i+1),lv:0,custom:true,es:cleanS(c.es,200),en:cleanS(c.en,200),tok,im:/^[12][a-z0-9]{3,12}$/.test(String(c.im||''))?String(c.im):'',img:''};
+ const o={id:'c'+(i+1),lv:0,custom:true,es:cleanS(c.es,200),en:cleanS(c.en,200),tok,im:/^[1-9][a-z0-9]{3,12}$/.test(String(c.im||''))?String(c.im):'',img:''};
  const bl=/^([a-z0-9]{1,12})\.([a-z0-9]{1,12})\.([a-z0-9]{1,12})$/.exec(String(c.bl||''));
  if(bl&&PERS[bl[1]]&&OB[bl[2]]&&PL[bl[3]]){try{const sv=sceneP(bl[2],bl[3],bl[1])[1];o.img='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(sv);o.sv=true;o.im='';}catch(e){}}   /* 積木組句：圖由程式現場畫，不存圖片 */
  return o;
 }
-/* 老師加的圖：存在 shared_babimgs/{句庫碼}_{1|2}（每份最多 10 張，代號前面的數字就是在哪一份）。
+/* 老師加的圖：存在 shared_babimgs/{句庫碼}_{1～9}（每份最多 10 張，代號前面的數字就是在哪一份）。
    用句庫文件的更新時間當版本，裝置記住圖片（localStorage），沒更新就不再下載，省資料庫流量；讀不到圖就當沒有圖，照出文字題。 */
 async function custImgs(d){
  const need=new Set(BANK.cust.filter(x=>x.im).map(x=>x.im.charAt(0)));
@@ -1175,7 +1175,7 @@ async function bankLoad(){
   if(!BANK.fatal){
    const s=await db.collection('shared_babanks').doc(BANK.id).get(),d=s.exists?s.data():null;
    if(!d||d.game!==CLS_GAME||!Array.isArray(d.ids))BANK.fatal='linkBad';
-   else{const have=new Set(DATA.map(x=>x.id));BANK.ids=d.ids.filter(i=>have.has(i));BANK.name=String(d.name||'').slice(0,40);BANK.set=new Set(BANK.ids);BANK.cust=(Array.isArray(d.custom)?d.custom:[]).slice(0,80).map(custParse).filter(Boolean);BANK.cust.forEach(x=>x.tok.forEach(t=>{if(!TOKMAP[t.tc])TOKMAP[t.tc]=t;}));await custImgs(d);BANK.cfg=(d.cfg&&typeof d.cfg==='object')?{n:+d.cfg.n,mix:String(d.cfg.mix||'')}:null;if(!BANK.ids.length&&!BANK.cust.length)BANK.fatal='linkBad';}
+   else{const have=new Set(DATA.map(x=>x.id));BANK.ids=d.ids.filter(i=>have.has(i));BANK.name=String(d.name||'').slice(0,40);BANK.set=new Set(BANK.ids);BANK.cust=(Array.isArray(d.custom)?d.custom:[]).slice(0,300).map(custParse).filter(Boolean);BANK.cust.forEach(x=>x.tok.forEach(t=>{if(!TOKMAP[t.tc])TOKMAP[t.tc]=t;}));await custImgs(d);BANK.cfg=(d.cfg&&typeof d.cfg==='object')?{n:+d.cfg.n,mix:String(d.cfg.mix||'')}:null;if(!BANK.ids.length&&!BANK.cust.length)BANK.fatal='linkBad';}
   }
  }catch(e){console.warn(e);BANK.fatal='linkOff';}
  BANK.loading=false;
