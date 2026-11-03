@@ -347,7 +347,7 @@ with sync_playwright() as p:
 
     # 手機版首頁／排行榜：整頁不捲動，內容在 #app 裡面捲，最上面一定回得去，版權小字看得到
     for scr in ['start', 'lb']:
-        b, pg, errs = page(p, width=390, height=640)
+        b, pg, errs = page(p, width=390, height=(480 if scr == 'start' else 640))
         pg.evaluate("(a)=>{ST.screen=a; render();}", scr); pg.wait_for_timeout(200)
         m = pg.evaluate("""(() => { const d = document.documentElement, a = document.getElementById('app'), c = document.getElementById('hgCopy');
           return {page: d.scrollHeight - innerHeight, inner: a.scrollHeight - a.clientHeight, copyBottom: c ? c.getBoundingClientRect().bottom : -1, win: innerHeight}; })()""")
